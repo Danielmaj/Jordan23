@@ -21,6 +21,7 @@ def LocateBallCenter(frame):
     cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
                             cv2.CHAIN_APPROX_SIMPLE)[-2]
     center = None
+    lenq = 10 # Maximum number of center points stored in memory
 
     pts = deque(maxlen=lenq)
 
@@ -61,6 +62,6 @@ def LocateGreenBall():
 
     # We average the location to avoid outliers
     ball = center = (int(0), int(0))
-    for c in pts
+    for c in pts:
         ball = ball + c
     ball /= lenq
