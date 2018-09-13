@@ -7,7 +7,6 @@ import rospy
 # Martin Appo implementation of comunication with mainboard. File from
 #https://bitbucket.org/MartinAppo/diploaf-2017/src/master/hardware_module/src/hardware_module/comport_mainboard.py
 
-
 class ComportMainboard(threading.Thread):
     connection = None
     connection_opened = False
