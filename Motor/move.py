@@ -1,15 +1,21 @@
 import serial
-import import sys
-sys.path.append('../')
-from comunication/mainboard.py import ComportMainboard
-
-
-def forward(com):
-
-    vel = [0,30,30,0]
+from mainboard import ComportMainboard
+from time import sleep
+def forward(power):
+    vel = [0,0,-power,power]
     return vel
 
+def backward(power):
+    vel = [0,0,power,-power]
+    return vel
 
+def right(power):
+    vel = [0,0,power,power]
+    return vel
+
+def left(power):
+    vel = [0,0,-power,+power]
+    return vel
 def stop():
 
     vel = [0,0,0,0]
@@ -17,7 +23,7 @@ def stop():
 
 def rotate():
 
-    vel = [30,30,30,0]
+    vel = [30,30,30,30]
     return vel
 
 def start():
@@ -34,6 +40,10 @@ def move(com,vel):
 def main():
 
     com = start()
-    move(com,forward())
+    for i in range(3):
+       move(com,forward(30))
+       #move(com,backward(30))
+       sleep(1)
+    com.close()
 
 main()
