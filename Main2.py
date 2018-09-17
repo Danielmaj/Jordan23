@@ -11,13 +11,15 @@ def CreateConnection():
     com.open()
     return com
 
-def move(com,vel):
+def move(vel):
     com.write("sd:{}:{}:{}:{}".format(vel[0],vel[3],vel[2],vel[3]))
     #print(com.connection.readline())
     #com.connection.flush()
 
-def move2(vel):
-    com.write("sd:{}:{}:{}:{}".format(vel[0],vel[3],vel[2],vel[3]))
+def move_eternally(vel):
+    while true
+        com.write("sd:{}:{}:{}:{}".format(vel[0],vel[3],vel[2],vel[3]))
+        time.sleep(0.08)
     #print(com.connection.readline())
     #com.connection.flush()
 
@@ -29,30 +31,26 @@ def Centerball():
 
     # Rotate until you find the green ball
     pool = Pool(processes=2)
-    see_ball = pool.map_async(LocateGreenBall)
-    velrot = test_all_wheels(20)
-    rotate = pool.map_async(move2(velrot))
+    see_center_ball = pool.map_async(CenterOnGreenBall)
+    velrot = test_all_wheels(15)
+    rotate = pool.map_async(move_eternally(velrot))
 
-    see_ball.wait()
+    see_center_ball.wait(timeout=2) # Wait until you see the ball in the center or 2 seconds
     pool.close()
     pool.join()
-    move2(stop())
-    center
-
-    # Adjust the position to the center
-
+    move(stop())
 
 
 def main():
     com =CreateConnection()
     com.launch_motor(100)
     for i in range(3):
-       move(com,forward(30))
+       move(forward(30))
        sleep(1)
-    move(com,stop())
+    move(stop())
 
     for i in range(3):
-       move(com,backward(30))
+       move(backward(30))
        sleep(1)
     com.close()
 main()
