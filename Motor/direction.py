@@ -1,7 +1,8 @@
 import numpy as np
 
 #Given a direction, angle and angular velocity returns speed of the wheels
-#wheelLinearVelocity = robotSpeed * cos(robotDirectionAngle - wheelAngle) + wheelDistanceFromCenter * robotAngularVelocity
+#wheelLinearVelocity = robotSpeed * cos(robotDirectionAngle - wheelAngle) /
+#+ wheelDistanceFromCenter * robotAngularVelocity
 def wheelspeeds(rspeed,rangle,rangular):
 
     wheels_dist = np.array([0.115, 0.115,0.115]) #Not sure of the exact distance

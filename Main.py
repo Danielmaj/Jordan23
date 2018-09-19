@@ -11,35 +11,57 @@ def CreateConnection():
     com.open()
     return com
 
-def move(com,vel):
+def move(vel):
     com.write("sd:{}:{}:{}:{}".format(vel[0],vel[3],vel[2],vel[3]))
     #print(com.connection.readline())
     #com.connection.flush()
 
-def move2(vel):
-    com.write("sd:{}:{}:{}:{}".format(vel[0],vel[3],vel[2],vel[3]))
-    #print(com.connection.readline())
-    #com.connection.flush()
+def move_constant(vel):
+    while true
+        move(vel)
+        time.sleep(0.08)
 
 
 def Centerball():
+    ''' Rotate until you find the green ball around center camera'''
 
     com = CreateConnection()
     com.launch_motor(100)
 
-    # Rotate until you find the green ball
     pool = Pool(processes=2)
     see_ball = pool.map_async(LocateGreenBall)
     velrot = test_all_wheels(20)
-    rotate = pool.map_async(move2(velrot))
+    rotate = pool.map_async(move_constant,velrot)
 
+    # Stop
     see_ball.wait()
     pool.close()
     pool.join()
-    move2(stop())
-    center
+    move(stop())
 
-    # Adjust the position to the center
+def GoToballStraight():
+    '''Robot drives straight to the ball and does not rotate '''
+    Centerball()
+
+    #pool = Pool(processes=2)
+    #see_ball = pool.map_async(LocateGreenBall)
+    #vel = forward(30)
+    #rotate = pool.map_async(move_constant,velrot)
+
+    # Stop
+    #see_ball.wait()
+    #pool.close()
+    #pool.join()
+    #move(stop())
+    #com.close()
+
+
+
+def GotoBallAngle():
+    '''Robot drives at an angle to the ball and does not rotate '''
+    move(stop())
+
+
 
 
 
@@ -47,12 +69,12 @@ def main():
     com =CreateConnection()
     com.launch_motor(100)
     for i in range(3):
-       move(com,forward(30))
+       move(forward(30))
        sleep(1)
-    move(com,stop())
+    move(stop())
 
     for i in range(3):
-       move(com,backward(30))
+       move(backward(30))
        sleep(1)
     com.close()
 main()
