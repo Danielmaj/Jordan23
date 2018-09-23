@@ -60,10 +60,11 @@ class ComportMainboard(threading.Thread):
                 print('mainboard: err connection close')
             self.connection = None
 
-    def Readmsgs(self):
+    def Readmsgs(self,verbos=False):
 	try:
 	    self.connection.flush()
-	    print(self.connection.readline())
+            if verbos:
+	        print(self.connection.readline())
 	except Exception as ex:
 	    print(ex)
 
