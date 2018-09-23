@@ -1,12 +1,25 @@
 import pyrealsense2 as rs
 import numpy as np
 import cv2
-from locateBall import LocateBallCenter
+from Image_Handler import Image_Handler
+import sys
+sys.path.append('../')
+from Hardware.mainboard import *
+from Hardware.Motor import *
+#Connection to main board
+com = ComportMainboard()
+com.open()
+
 # Configure depth and color streams
 pipeline = rs.pipeline()
 config = rs.config()
 config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
 config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
+def Go_Some_Where(coordinates):
+    if coordinates[0]>300:
+       move(com,right(10))
+    if coordinates[0]<300:
+       move(com,left(10))
 
 # Start streaming
 pipeline.start(config)
@@ -24,7 +37,8 @@ try:
         # Convert images to numpy arrays
         depth_image = np.asanyarray(depth_frame.get_data())
         color_image = np.asanyarray(color_frame.get_data())
-        print(LocateBallCenter(color_image))
+        coordinates = img_handler.LocateBallCenter(color_image)
+        Go_Some_Where(coordinates)
         # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
         depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
 
@@ -37,6 +51,7 @@ try:
         cv2.waitKey(1)
 
 finally:
-
     # Stop streaming
+    print('am done with you')
     pipeline.stop()
+    com.close()
