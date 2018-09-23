@@ -11,6 +11,14 @@ def wheelspeeds(rspeed,rangle,rangular):
     vel = rspeed*np.cos(rangle - wheels_angle) + wheels_dist*rangular
     return vel
 
+def move(com,vel):
+    com.write("sd:{}:{}:{}".format(vel[0],vel[1],vel[2]))
+    com.Readmsgs()
+
+def thrower(com,value):
+    com.write("d:{}".format(value))
+    com.Readmsgs()
+
 def move_command(vel):
     return "sd:{}:{}:{}".format(vel[0],vel[3],vel[2])
 
