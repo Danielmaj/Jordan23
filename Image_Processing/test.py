@@ -10,31 +10,16 @@ from time import sleep
 #Connection to main board
 com = ComportMainboard()
 com.open()
-com.launch_motor(10)
+
 # Configure depth and color streams
 pipeline = rs.pipeline()
 config = rs.config()
 config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
 config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
 
-def Go_Some_Where(coordinates):
-    print(coordinates)
-    com.launch_motor(100)
-    if coordinates[0]>340:
-       
-       move(com,right(10))
-       #sleep(0.01)
-    elif coordinates[0]<300:
-       move(com,left(10))
-       #sleep(0.01)
-    else:
-       move(com,stop())
-       #sleep(0.01)
-
 # Start streaming
 pipeline.start(config)
 img_handler = Image_Handler()
-i=0
 try:
     while True:
 
@@ -46,18 +31,10 @@ try:
             continue
 
         # Convert images to numpy arrays
-        #depth_image = np.asanyarray(depth_frame.get_data())
+        depth_image = np.asanyarray(depth_frame.get_data())
         color_image = np.asanyarray(color_frame.get_data())
-        coordinates = img_handler.LocateBallCenter(color_image)
-        if coordinates is None:
-           print('rotating',i)
-           i+=1
-           move(com,right(10))
-           #sleep(0.01)
-        else:
-           move(com,stop())
-           sleep(5)
-           Go_Some_Where(coordinates)
+        print(img_handler.LocateBallCenter(color_image))
+        sleep(0.1)
         # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
         #depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
 

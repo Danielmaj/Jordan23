@@ -2,7 +2,7 @@ import serial
 from Hardware.mainboard import ComportMainboard
 from time import sleep
 from Hardware.Motor import *
-from Image_Processing.locateBall import *
+from Image_Processing.Image_Handler import *
 
 from multiprocessing import Pool
 global com
@@ -13,7 +13,7 @@ def CreateConnection():
     return com
 
 def Test_motors(com):
-    thrower(com,1500)
+    #thrower(com,1500)
     move(com,stop())
     for i in range(3):
        move(com,left(10))
