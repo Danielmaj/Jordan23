@@ -11,24 +11,27 @@ def wheelspeeds(rspeed,rangle,rangular):
     vel = rspeed*np.cos(rangle - wheels_angle) + wheels_dist*rangular
     return vel
 
+def move_command(vel):
+    return "sd:{}:{}:{}".format(vel[0],vel[3],vel[2])
+
 def forward(power):
-    vel = [0,0,-power,power]
+    vel = [0,-power,power]
     return vel
 
 def backward(power):
-    vel = [0,0,power,-power]
+    vel = [0,power,-power]
     return vel
 
 def right(power):
-    vel = [0,0,power,power]
+    vel = [power,power,power]
     return vel
 
 def left(power):
-    vel = [0,0,-power,-power]
+    vel = [-power,-power,-power]
     return vel
 
 def stop():
-    vel = [0,0,0,0]
+    vel = [0,0,0]
     return vel
 
 def test_all_wheels(power):
