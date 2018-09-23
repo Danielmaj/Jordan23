@@ -60,6 +60,13 @@ class ComportMainboard(threading.Thread):
                 print('mainboard: err connection close')
             self.connection = None
 
+    def Readmsgs(self):
+	try:
+	    self.connection.flush()
+	    print(self.connection.readline())
+	except Exception as ex:
+	    print(ex)
+
     def run(self):
         if self.open():  # open serial connections
             print('mainboard: opened')
