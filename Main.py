@@ -10,13 +10,14 @@ global com
 def CreateConnection():
     com = ComportMainboard()
     com.open()
+    com.launch_motor(100)
     return com
 
 def Test_motors(com):
-    #thrower(com,1500)
+    thrower(com,1500)
     move(com,stop())
     for i in range(3):
-       move(com,left(10))
+       move(com,left(30))
        sleep(1)
     move(com,stop())
 
