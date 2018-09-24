@@ -31,7 +31,7 @@ def Go_Some_Where(coordinates):
     print(coordinates)
     com.launch_motor(100)
     if coordinates[0]>340:
-       
+
        move(com,right(10))
        sleep(0.01)
     elif coordinates[0]<300:

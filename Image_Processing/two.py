@@ -10,7 +10,7 @@ from time import sleep
 #Connection to main board
 com = ComportMainboard()
 com.open()
-com.launch_motor(10)
+com.launch_motor(100)
 # Configure depth and color streams
 pipeline = rs.pipeline()
 config = rs.config()
@@ -19,17 +19,17 @@ config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
 
 def Go_Some_Where(coordinates):
     print(coordinates)
-    com.launch_motor(100)
-    if coordinates[0]>340:
-       
+    x,y = coordinates
+    stop = False
+    #com.launch_motor(100)
+    if x > 340:
        move(com,right(10))
-       #sleep(0.01)
-    elif coordinates[0]<300:
+    elif x < 300:
        move(com,left(10))
-       #sleep(0.01)
     else:
        move(com,stop())
-       #sleep(0.01)
+       stop = True
+    return stop   #sleep(0.01)
 
 # Start streaming
 pipeline.start(config)
@@ -53,11 +53,12 @@ try:
            print('rotating',i)
            i+=1
            move(com,right(10))
-           #sleep(0.01)
         else:
-           move(com,stop())
-           sleep(5)
-           Go_Some_Where(coordinates)
+           stop = Go_Some_Where(coordinates)
+           if stop:
+              break
+        sleep(0.2)
+
         # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
         #depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
 
