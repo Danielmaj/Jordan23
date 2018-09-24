@@ -9,8 +9,12 @@ class Image_Handler():
         # define the lower and upper boundaries of the "green"
         # ball in the HSV color space, then initialize the
         # list of tracked points
-        greenLower = (29, 86, 6)
-        greenUpper = (64, 255, 255)
+        #greenLower = (29, 86, 6)
+        #greenUpper = (64, 255, 255)
+        #greenLower = (40,40,40)
+        #greenUpper = (70, 255, 255)
+	greenLower = (60,100,40)
+	greenUpper = (90, 255, 255)
 
         # resize the frame, blur it, and convert it to the HSV
         # color space

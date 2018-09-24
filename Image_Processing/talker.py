@@ -58,6 +58,9 @@ def talker():
     rospy.init_node('talker', anonymous=True)
     rate = rospy.Rate(10) # 10hz
     i=0
+    for i in range(60):
+        print('killing frams',i)
+        frames = pipeline.wait_for_frames()
     while not rospy.is_shutdown(): 
         # Wait for a coherent pair of frames: depth and color
         frames = pipeline.wait_for_frames()
@@ -71,7 +74,7 @@ def talker():
         color_image = np.asanyarray(color_frame.get_data())
         coordinates = img_handler.LocateBallCenter(color_image)
         if coordinates is None:
-            continue
+            coordinates = (-1,-1)
         #hello_str = "hello world %s%s" % rospy.get_time()%i
         hello_str = "{},,{}".format(coordinates[0],coordinates[1])
         rospy.loginfo(hello_str)

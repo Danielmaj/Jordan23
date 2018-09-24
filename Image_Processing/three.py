@@ -1,7 +1,4 @@
-import pyrealsense2 as rs
 import numpy as np
-import cv2
-from Image_Handler import Image_Handler
 import sys
 sys.path.append('../')
 from Hardware.mainboard import *
