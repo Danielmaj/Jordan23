@@ -39,7 +39,7 @@ def center_on_ball(coordinates):
     return pause   #sleep(0.01)
 
 
-def rotate_to_ball:
+def rotate_to_ball():
     # Start streaming
     pipeline.start(config)
     img_handler = Image_Handler()
@@ -75,3 +75,4 @@ def rotate_to_ball:
         print('Finish centering on ball')
         pipeline.stop()
         com.close()
+rotate_to_ball()
