@@ -14,7 +14,7 @@ class Image_Handler():
         #greenLower = (40,40,40)
         #greenUpper = (70, 255, 255)
     	greenLower = (60,100,100)
-   	greenUpper = (90,200,160)
+   	greenUpper = (90, 255,160)
 
         # resize the frame, blur it, and convert it to the HSV
         # color space
