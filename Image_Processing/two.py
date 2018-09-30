@@ -15,16 +15,16 @@ pipeline = rs.pipeline()
 config = rs.config()
 config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
 config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
-veloceity = 1
+vel = 5
 def Go_Some_Where(coordinates):
     print(coordinates)
     x,y = coordinates
     pause = False
     #com.launch_motor(100)
-    if x > 400:
-       move(com,right(veloceity))
-    elif x < 300:
-       move(com,left(veloceity))
+    if x > 330:
+       move(com,right(vel))
+    elif x < 310:
+       move(com,left(vel))
     else:
        print('we arrived =-==------------=========')
        move(com,stop())
@@ -52,8 +52,8 @@ try:
         if coordinates is None:
            print('rotating',rotate)
            rotate+=1
-           if rotate==50:
-               move(com,left(5))
+           if rotate==10:
+               move(com,left(20))
                rotate=0
         else:
            rotate=0

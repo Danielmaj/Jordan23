@@ -17,7 +17,7 @@ config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
 config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
 tune_vel_big = 10
 tune_vel_small = 2
-rotate_vel = 30
+rotate_vel = 10 
 
 def center_on_ball(coordinates):
     print(coordinates)
