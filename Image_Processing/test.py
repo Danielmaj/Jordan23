@@ -8,6 +8,34 @@ sys.path.append('../')
 from Hardware.mainboard import *
 from Hardware.Motor import *
 from time import sleep
+import threading
+import ctypes
+
+def terminate_thread(thread):
+    """Terminates a python thread from another thread.
+
+    :param thread: a threading.Thread instance
+    """
+    if not thread.isAlive():
+        return
+
+    exc = ctypes.py_object(SystemExit)
+    res = ctypes.pythonapi.PyThreadState_SetAsyncExc(
+        ctypes.c_long(thread.ident), exc)
+    if res == 0:
+        raise ValueError("nonexistent thread id")
+    elif res > 1:
+        # """if it returns a number greater than one, you're in trouble,
+        # and you should call it again with exc=NULL to revert the effect"""
+        ctypes.pythonapi.PyThreadState_SetAsyncExc(thread.ident, None)
+        raise SystemError("PyThreadState_SetAsyncExc failed")
+
+positions=None
+def click(event, x, y, flags, param):
+        global positions
+	if event == cv2.EVENT_LBUTTONDOWN:
+		positions = (x, y)
+ 
 #Connection to main board
 com = ComportMainboard()
 com.open()
@@ -15,24 +43,32 @@ com.open()
 # Configure depth and color streams
 pipeline = rs.pipeline()
 config = rs.config()
-config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
-config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
+#config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
+#config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
+config.enable_stream(rs.stream.depth, 1280, 720, rs.format.z16, 30)
+config.enable_stream(rs.stream.color, 1280, 720, rs.format.bgr8, 30)
 
 # Start streaming
 pipeline.start(config)
-img_handler = Image_Handler()
-def LocateBallCenter(frame):
-	# define the lower and upper boundaries of the "green"
-	# ball in the HSV color space, then initialize the
-	# list of tracked points
-	#greenLower = (29, 86, 6)
-	#greenUpper = (64, 255, 255)
-	greenLower = (60,100,40)
-	greenUpper = (90, 255, 255)
 
-	# resize the frame, blur it, and convert it to the HSV
+
+greenLower = (60,100,100)
+greenUpper = (90, 200, 160)
+def UpdateLower_Upper():
+	global greenLower,greenUpper
+        while True:
+                print('Enter values to print')
+		x = input()
+                print(type(x),x)
+                numbers = [int(j) for j in x]
+                greenLower=np.array(numbers[0:3])
+                greenUpper=np.array(numbers[3:6] )
+		print(x)
+def LocateBallCenter(frame):
+        global greenLower,greenUpper
 	# color space
 	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        
 	mask = cv2.inRange(hsv, greenLower, greenUpper)
         #mask = cv2.inRange(hsv, (36, 0, 0), (70, 255,255))
 
@@ -43,7 +79,7 @@ def LocateBallCenter(frame):
 
 	## save 
 	#cv2.imwrite("green.png", green)
-        return green
+        return green,hsv
 	mask = cv2.erode(mask, None, iterations=1)
 	mask = cv2.dilate(mask, None, iterations=1)
 
@@ -71,6 +107,8 @@ def LocateBallCenter(frame):
 		center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 	return center
 try:
+    update = threading.Thread(target=UpdateLower_Upper)
+    update.start()
     while True:
 
         # Wait for a coherent pair of frames: depth and color
@@ -83,7 +121,7 @@ try:
         # Convert images to numpy arrays
         depth_image = np.asanyarray(depth_frame.get_data())
         color_image = np.asanyarray(color_frame.get_data())
-        depth_image = LocateBallCenter(color_image)
+        depth_image,hsv = LocateBallCenter(color_image)
         # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
 
         # Stack both images horizontally
@@ -91,11 +129,19 @@ try:
 
         # Show images
         cv2.namedWindow('RealSense', cv2.WINDOW_AUTOSIZE)
+        cv2.setMouseCallback('RealSense',click)
         cv2.imshow('RealSense', images)
+        if positions is not None:
+            #print(positions[0],positions[1],depth_image.shape)
+            x = positions[0]
+            y = positions[1]
+            print(hsv[y,x][0],hsv[y,x][1],hsv[y,x][2])
+            positions=None
         cv2.waitKey(1)
 
 finally:
     # Stop streaming
     print('am done with you')
+    terminate_thread(update)
     pipeline.stop()
     com.close()
