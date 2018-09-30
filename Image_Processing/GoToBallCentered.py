@@ -47,7 +47,6 @@ try:
             continue
 
         # Convert images to numpy arrays
-        #depth_image = np.asanyarray(depth_frame.get_data())
         color_image = np.asanyarray(color_frame.get_data())
         coordinates = img_handler.LocateBallCenter(color_image)
 
@@ -65,9 +64,11 @@ try:
         else: # Go towards the ball
             if coordinates is None: #If you lose sight of the ball rotate again
                 centred = False
-            dist = img_handler.howfar(depth_frame,coordinate)
-            print(dist)
-            sleep(0.05)
+            else:
+                depth_image = np.asanyarray(depth_frame.get_data())
+                dist = img_handler.howfar(depth_image,coordinates)
+                print(dist)
+                sleep(0.05)
 
         # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
         #depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
