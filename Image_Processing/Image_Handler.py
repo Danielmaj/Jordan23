@@ -47,7 +47,7 @@ class Image_Handler():
                 center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
         return center
 
-    def howfar(depth_frame,coordinates):
+    def howfar(self,depth_frame,coordinates):
         '''Returns the distance  in mm around a center point a square of size s'''
         '''The camera is inclined so this brings some problems '''
 
@@ -62,8 +62,6 @@ class Image_Handler():
         xmax = min(xc+size,640)
         ymin = max(yc-size,0)
         ymax = min(yc+size,480)
-
-        depth_intrin = depth_frame.profile.as_video_stream_profile().intrinsics
 
         avg_dist = 0
         for x in range(xmin, xmax):
