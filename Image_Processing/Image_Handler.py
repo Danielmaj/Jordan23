@@ -13,8 +13,8 @@ class Image_Handler():
         #greenUpper = (64, 255, 255)
         #greenLower = (40,40,40)
         #greenUpper = (70, 255, 255)
-	greenLower = (60,100,40)
-	greenUpper = (90, 255, 255)
+    	greenLower = (60,100,40)
+    	greenUpper = (90, 255, 255)
 
         # resize the frame, blur it, and convert it to the HSV
         # color space
@@ -47,13 +47,16 @@ class Image_Handler():
                 center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
         return center
 
-    def howfar(depth_frame,coordinate,size):
+    def howfar(depth_frame,coordinates):
         '''Returns the distance  in mm around a center point a square of size s'''
         '''The camera is inclined so this brings some problems '''
 
+        size = 5
+        cam_angle = 5
+        cam_height = 200
+
         # Distance from the camera plane(not camera center) to the object in mm
-        xc,yc = coordinate
-        avg_dist = 0
+        xc,yc = coordinates
 
         xmin = max(xc-size,0)
         xmax = min(xc+size,640)
@@ -62,14 +65,11 @@ class Image_Handler():
 
         depth_intrin = depth_frame.profile.as_video_stream_profile().intrinsics
 
+        avg_dist = 0
         for x in range(xmin, xmax):
             for y in range(ymin, ymax):
                 depth = depth_frame.get_distance(x,y)
-                avg_dist = + depth
-                #depth_point = rs.rs2_deproject_pixel_to_point(depth_intrin, [y, x], depth)
-                # depth_point x y z
+                avg_dist +=  depth_frame.get_distance(x,y)
         avg_dist /= (xmax - xmin + ymax - ymin)
         # Distance respect to the camera
-        cam_angle = 45
-        cam_height = 200
-        return dist
+        return avg_dist

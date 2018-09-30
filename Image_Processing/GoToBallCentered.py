@@ -66,7 +66,8 @@ try:
                 centred = False
             else:
                 depth_image = np.asanyarray(depth_frame.get_data())
-                dist = img_handler.howfar(depth_image,coordinates)
+                depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
+                dist = img_handler.howfar(depth_colormap,coordinates)
                 print(dist)
                 sleep(0.05)
 
