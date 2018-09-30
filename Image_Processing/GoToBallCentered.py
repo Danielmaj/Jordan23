@@ -68,10 +68,11 @@ try:
                 depth_image = np.asanyarray(depth_frame.get_data())
                 depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
                 #dist = img_handler.howfar(depth_frame,coordinates)
-                dist = depth_frame.get_distance(coordinates)
+                x,y = coordinates
+		dist = depth_frame.get_distance(int(x),int(y))
                 print("Distance:",dist)
                 if dist > 0.3:
-                     move(com,wheelspeeds(10,0,0)) #Forward
+                     move(com,wheelspeeds(10,90,0)) #Forward
                 else:
                      move(com,stop())
                      break
