@@ -1,6 +1,7 @@
 import pyrealsense2 as rs
 import numpy as np
 import cv2
+import math
 from Image_Handler import Image_Handler
 import sys
 sys.path.append('../')
@@ -57,26 +58,23 @@ try:
                if rotate==10:
                    move(com,left(20))
                    rotate=0
-            else:
-               rotate=0
-               centred = Rotate_towards_ball(coordinates)
             sleep(0.01)
         else: # Go towards the ball
             if coordinates is None: #If you lose sight of the ball rotate again
                 centred = False
             else:
-                depth_image = np.asanyarray(depth_frame.get_data())
-                depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
                 #dist = img_handler.howfar(depth_frame,coordinates)
                 x,y = coordinates
 		        dist = depth_frame.get_distance(int(x),int(y))
                 print("Distance:",dist)
                 if dist > 0.3:
-                    move(com,wheelspeeds(15,90,0)) #Forward
+                    dx = (x -240)/240
+                    angle_to_ball = 90*(1 + dx/dist)
+			        move(com,wheelspeeds(15,angle_to_ball,0)) #Forward
                 	#move(com,forward(-10))
-		else:
-                     if dist > 0.01:
-			move(com,stop())
+		        else:
+                    if dist > 0.01:
+			           move(com,stop())
                    	break
                 sleep(0.01)
 
