@@ -9,6 +9,7 @@ def wheelspeeds(rspeed,rangle,rangular):
     rspeed = np.array([rspeed, rspeed, rspeed])
     rangular = np.array([rangular, rangular, rangular])
     vel = rspeed*np.cos(rangle - wheels_angle) + wheels_dist*rangular
+    vel = vel.astype(int)
     return vel
 
 def move(com,vel):

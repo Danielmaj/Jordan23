@@ -72,10 +72,13 @@ try:
 		dist = depth_frame.get_distance(int(x),int(y))
                 print("Distance:",dist)
                 if dist > 0.3:
-                     move(com,wheelspeeds(10,90,0)) #Forward
-                else:
-                     move(com,stop())
-                     break
+                     	print(wheelspeeds(15,90,0))
+			move(com,wheelspeeds(15,90,0)) #Forward
+                	#move(com,forward(-10))
+		else:
+                     if dist > 0.01:	     
+			move(com,stop())
+                   	break
                 sleep(0.01)
 
         # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
