@@ -13,12 +13,13 @@ class Image_Handler():
         #greenUpper = (64, 255, 255)
         #greenLower = (40,40,40)
         #greenUpper = (70, 255, 255)
-    	greenLower = (60,100,100)
-   	greenUpper = (90,200,160)
+    	greenLower = (35,208,90)
+   	    greenUpper = (58,255,169)
 
         # resize the frame, blur it, and convert it to the HSV
         # color space
-        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        blurred = cv2.GaussianBlur(frame, (11, 11), 0)
+        hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
         mask = cv2.inRange(hsv, greenLower, greenUpper)
         mask = cv2.erode(mask, None, iterations=1)
         mask = cv2.dilate(mask, None, iterations=1)
