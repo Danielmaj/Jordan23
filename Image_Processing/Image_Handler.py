@@ -13,15 +13,23 @@ class Image_Handler():
         #greenUpper = (64, 255, 255)
         #greenLower = (40,40,40)
         #greenUpper = (70, 255, 255)
-    	greenLower = (60,100,100)
-   	greenUpper = (90,200,160)
+        #Last Best
+    	#greenLower = (60,100,100)
+   	#greenUpper = (90,200,160)
+        #New Best
+        #greenLower = (15,27,56)
+        #greenUpper = (90,255,146)
+        #New Best
+        greenLower = (25,110,56)
+        greenUpper = (90,255,146)
+        
 
         # resize the frame, blur it, and convert it to the HSV
         # color space
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         mask = cv2.inRange(hsv, greenLower, greenUpper)
-        mask = cv2.erode(mask, None, iterations=1)
-        mask = cv2.dilate(mask, None, iterations=1)
+        #mask = cv2.erode(mask, None, iterations=1)
+        #mask = cv2.dilate(mask, None, iterations=1)
 
         # find contours in the mask and initialize the current
         # (x, y) center of the ball
@@ -43,9 +51,9 @@ class Image_Handler():
             ((x, y), radius) = cv2.minEnclosingCircle(c)
             M = cv2.moments(c)
             # only proceed if the radius meets a minimum size
-            if radius > 7:
+            if radius > 5:
                 center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
-        return center
+        return center#,radius
 
     def howfar(self,depth_frame,coordinates):
         '''Returns the distance  in mm around a center point a square of size s'''

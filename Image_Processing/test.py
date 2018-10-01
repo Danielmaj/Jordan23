@@ -35,6 +35,7 @@ def click(event, x, y, flags, param):
         global positions
 	if event == cv2.EVENT_LBUTTONDOWN:
 		positions = (x, y)
+                print(x,y)
  
 #Connection to main board
 com = ComportMainboard()
@@ -43,10 +44,10 @@ com.open()
 # Configure depth and color streams
 pipeline = rs.pipeline()
 config = rs.config()
-#config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
-#config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
-config.enable_stream(rs.stream.depth, 1280, 720, rs.format.z16, 30)
-config.enable_stream(rs.stream.color, 1280, 720, rs.format.bgr8, 30)
+config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
+config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
+#config.enable_stream(rs.stream.depth, 1280, 720, rs.format.z16, 30)
+#config.enable_stream(rs.stream.color, 1280, 720, rs.format.bgr8, 30)
 
 # Start streaming
 pipeline.start(config)
@@ -67,7 +68,10 @@ def UpdateLower_Upper():
 def LocateBallCenter(frame):
         global greenLower,greenUpper
 	# color space
-	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+        #circles = cv2.HoughCircles(gray,cv2.HOUGH_GRADIENT, 1,20,param1=50,param2=30,minRadius=0,maxRadius=0)
+        blurred = cv2.GaussianBlur(frame,(11,11),0)
+	hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
         
 	mask = cv2.inRange(hsv, greenLower, greenUpper)
         #mask = cv2.inRange(hsv, (36, 0, 0), (70, 255,255))
@@ -76,9 +80,15 @@ def LocateBallCenter(frame):
 	imask = mask>0
 	green = np.zeros_like(frame, np.uint8)
 	green[imask] = frame[imask]
-
-	## save 
+	#circles = np.uint16(np.around(circles))
+	#for i in circles[0,:]:
+	#    # draw the outer circle
+	#    cv2.circle(green,(i[0],i[1]),i[2],(0,255,0),2)
+	#    # draw the center of the circle
+	#    cv2.circle(green,(i[0],i[1]),2,(0,0,255),3)
+		## save 
 	#cv2.imwrite("green.png", green)
+       
         return green,hsv
 	mask = cv2.erode(mask, None, iterations=1)
 	mask = cv2.dilate(mask, None, iterations=1)
