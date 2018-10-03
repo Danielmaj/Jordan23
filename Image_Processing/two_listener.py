@@ -1,7 +1,4 @@
-import pyrealsense2 as rs
-import numpy as np
-import cv2
-from Image_Handler import Image_Handler
+from std_msgs.msg import String
 import sys
 sys.path.append('../')
 from Hardware.mainboard import *
@@ -10,30 +7,55 @@ from time import sleep
 #Connection to main board
 com = ComportMainboard()
 com.open()
+com.launch_motor(100)
+
+def callback(data):
+    rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data.data)
+
+def listener():
+
+    # In ROS, nodes are uniquely named. If two nodes with the same
+    # name are launched, the previous one is kicked off. The
+    # anonymous=True flag means that rospy will choose a unique
+    # name for our 'listener' node so that multiple listeners can
+    # run simultaneously.
+    rospy.init_node('listener', anonymous=True)
+
+    rospy.Subscriber('ball_coordinates', String, callback)
+
+    # spin() simply keeps python from exiting until this node is stopped
+    rospy.spin()
+
+if __name__ == '__main__':
+    try:
+        listener()
+    finally:
+        # Stop streaming
+        print('am done with you')
+        pipeline.stop()
+        com.close()
+    
+
+
+
+
 # Configure depth and color streams
-pipeline = rs.pipeline()
-config = rs.config()
-config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
-config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
-vel = 5
+veloceity = 1
 def Go_Some_Where(coordinates):
     print(coordinates)
     x,y = coordinates
     pause = False
     #com.launch_motor(100)
-    if x > 330:
-       move(com,right(vel))
-    elif x < 310:
-       move(com,left(vel))
+    if x > 340:
+       move(com,right(veloceity))
+    elif x < 300:
+       move(com,left(veloceity))
     else:
-       print('we arrived =-==------------=========')
        move(com,stop())
        pause = True
     return pause   #sleep(0.01)
 
 # Start streaming
-pipeline.start(config)
-img_handler = Image_Handler()
 rotate=0
 try:
     while True:
@@ -53,14 +75,14 @@ try:
            print('rotating',rotate)
            rotate+=1
            if rotate==10:
-               move(com,left(20))
+               move(com,right(10))
                rotate=0
         else:
            rotate=0
            pause = Go_Some_Where(coordinates)
            if pause:
               break
-        sleep(0.01)
+        sleep(0.2)
 
         # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
         #depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
@@ -73,8 +95,3 @@ try:
         #cv2.imshow('RealSense', images)
         #cv2.waitKey(1)
 
-finally:
-    # Stop streaming
-    print('am done with you')
-    pipeline.stop()
-    com.close()
