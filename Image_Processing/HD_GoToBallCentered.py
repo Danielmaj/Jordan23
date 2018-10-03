@@ -13,28 +13,29 @@ com.open()
 # Configure depth and color streams
 pipeline = rs.pipeline()
 config = rs.config()
-config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
-config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
+config.enable_stream(rs.stream.depth, 1280, 720, rs.format.z16, 30)
+config.enable_stream(rs.stream.color, 1280, 720, rs.format.bgr8, 30)
 vel = 5
-def Go_Some_Where(coordinates):
+def Rotate_towards_ball(coordinates):
     print(coordinates)
     x,y = coordinates
-    pause = False
+    centred = False
     #com.launch_motor(100)
-    if x > 330:
+    if x > 650:
        move(com,right(vel))
-    elif x < 310:
+    elif x < 630:
        move(com,left(vel))
     else:
        print('we arrived =-==------------=========')
        move(com,stop())
-       pause = True
-    return pause   #sleep(0.01)
+       centred = True
+    return centred   #sleep(0.01)
 
 # Start streaming
 pipeline.start(config)
 img_handler = Image_Handler()
 rotate=0
+centred = False
 try:
     while True:
 
@@ -46,21 +47,38 @@ try:
             continue
 
         # Convert images to numpy arrays
-        #depth_image = np.asanyarray(depth_frame.get_data())
         color_image = np.asanyarray(color_frame.get_data())
         coordinates = img_handler.LocateBallCenter(color_image)
-        if coordinates is None:
-           print('rotating',rotate)
-           rotate+=1
-           if rotate==10:
-               move(com,left(20))
+
+        if not centred:
+            if coordinates is None:
+               print('rotating',rotate)
+               rotate+=1
+               if rotate==10:
+                   move(com,left(20))
+                   rotate=0
+            else:
                rotate=0
-        else:
-           rotate=0
-           pause = Go_Some_Where(coordinates)
-           if pause:
-              break
-        sleep(0.01)
+               centred = Rotate_towards_ball(coordinates)
+            sleep(0.01)
+        else: # Go towards the ball
+            if coordinates is None: #If you lose sight of the ball rotate again
+                centred = False
+            else:
+                depth_image = np.asanyarray(depth_frame.get_data())
+                depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
+                #dist = img_handler.howfar(depth_frame,coordinates)
+                x,y = coordinates
+		dist = depth_frame.get_distance(int(x),int(y))
+                print("Distance:",dist)
+                if dist > 0.3:
+                    move(com,wheelspeeds(15,90,0)) #Forward
+                	#move(com,forward(-10))
+		else:
+                     if dist > 0.01:
+			move(com,stop())
+                   	break
+                sleep(0.01)
 
         # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
         #depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
@@ -75,6 +93,6 @@ try:
 
 finally:
     # Stop streaming
-    print('am done with you')
+    print('Finish')
     pipeline.stop()
     com.close()

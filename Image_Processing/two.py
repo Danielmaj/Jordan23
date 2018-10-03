@@ -21,9 +21,9 @@ def Go_Some_Where(coordinates):
     x,y = coordinates
     pause = False
     #com.launch_motor(100)
-    if x > 330:
+    if x > 400:
        move(com,right(vel))
-    elif x < 310:
+    elif x < 370:
        move(com,left(vel))
     else:
        print('we arrived =-==------------=========')
