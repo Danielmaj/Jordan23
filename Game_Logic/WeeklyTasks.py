@@ -169,7 +169,7 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
                ang_vel = -config.around_ang_vel
                ball_align = False
             else:
-               ballalign = True
+               ball_align = True
                ang_vel = 0
 
             if coordinates_basket == None:
