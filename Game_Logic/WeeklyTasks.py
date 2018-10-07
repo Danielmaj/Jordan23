@@ -33,7 +33,6 @@ def LocateBasket(frame,color,config):
 
         c = max(cnts, key=cv2.contourArea)
         x, y, w, h = cv2.boundingRect(c)
-        print("x",x,"y", y,"w", w,"h", h)
         # only proceed if the basket meets a minimum size
         if w*h > 20:
             center = (int(x), int(y))
@@ -197,7 +196,8 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
                         print("Basket x",xk)
                         print("Ball x",xb)
                     else:
-                        move(com,wheelspeeds(0,180,ang_vel/2))
+                        move(com,wheelspeeds(0,180,ang_vel))
+                        print("aligning with ball")
 
                 time.sleep(config.wait_time)
 
