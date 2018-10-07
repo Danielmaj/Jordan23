@@ -35,7 +35,7 @@ def LocateBasket(frame,color,config):
         x, y, w, h = cv2.boundingRect(c)
 
         # only proceed if the basket meets a minimum size
-        if w*h > 6:
+        if w*h > 20:
             center = (int(x), int(y))
     return center
 
