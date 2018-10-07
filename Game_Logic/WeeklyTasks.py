@@ -21,6 +21,7 @@ def LocateBasket(frame,color,config):
 
     blurred = cv2.GaussianBlur(frame, (11, 11), 0)
     hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
+
     mask = cv2.inRange(hsv, low, up)
     mask = cv2.erode(mask, None, iterations=1)
     mask = cv2.dilate(mask, None, iterations=1)
@@ -83,7 +84,6 @@ def Where_is(obj_name,color_frame,img_handler,config):
     coordinates = None
     color_image = np.asanyarray(color_frame.get_data())
     print(color_image.shape)
-    print(color_image[240,320,:])
 
     if obj_name == 'ball':
         coordinates = img_handler.LocateBallCenter(color_image)
@@ -209,17 +209,17 @@ def main():
     color_frame,depth_frame = Get_frames(pipeline)
     Where_is("basket",color_frame,img_handler,config)
 
-    #steps_forward = 50
+    steps_forward = 50
 
-    #for i in range(steps_forward):
-    #    move(com,wheelspeeds(15,90,0))
-    #    time.sleep(config.wait_time)
+    for i in range(steps_forward):
+        move(com,wheelspeeds(15,90,0))
+        time.sleep(config.wait_time)
 
-    #CenterOn('ball',com,pipeline,img_handler,config)
+    CenterOn('ball',com,pipeline,img_handler,config)
 
-    #GoTowards('ball',com,pipeline,img_handler,config,until=0.4,vel=15)
+    GoTowards('ball',com,pipeline,img_handler,config,until=0.4,vel=15)
 
-    #Aling_Basket_Ball(com,pipeline,img_handler,config)
+    Aling_Basket_Ball(com,pipeline,img_handler,config)
 
     #GoTowards('ball',com,pipeline,img_handler,config,until=0.2,vel=5)
 
