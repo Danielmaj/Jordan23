@@ -12,11 +12,11 @@ from time import sleep
 def LocateBasket(frame,color,config):
 
     if color == "blue":
-        low = lower_blue
-        up = upper_blue
+        low = config.lower_blue
+        up = config.upper_blue
     else:
-        low = lower_magenta
-        up = upper_magenta
+        low = config.lower_magenta
+        up = config.upper_magenta
 
 
     blurred = cv2.GaussianBlur(frame, (11, 11), 0)
