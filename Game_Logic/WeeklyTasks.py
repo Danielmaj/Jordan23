@@ -116,7 +116,7 @@ def CenterOn(obj_name,com,pipeline,img_handler,config):
         if coordinates == None:
             rotate+=1
             if rotate < config.rot_wait:
-                move(com,left(rot_vel))
+                move(com,left(config.rot_vel))
                 time.sleep(config.wait_time)
                 rotate = 0
                 coordinates = Where_is(obj_name,color_frame,img_handler,config)
