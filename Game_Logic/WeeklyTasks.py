@@ -83,6 +83,7 @@ def Where_is(obj_name,color_frame,img_handler,config):
     coordinates = None
     color_image = np.asanyarray(color_frame.get_data())
     print(color_image.shape)
+    print(color_image[240,320,:])
 
     if obj_name == 'ball':
         coordinates = img_handler.LocateBallCenter(color_image)
