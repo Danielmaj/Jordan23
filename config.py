@@ -60,8 +60,8 @@ class Config(object):
     def __init__(self):
         """Set values of computed attributes."""
         # Maximum x to consider the robot centred respect to an object
-        max_cent_x = robot_center_x + cent_precision
-        min_cent_x = robot_center_x - cent_precision
+        self.max_cent_x = self.robot_center_x + self.cent_precision
+        self.min_cent_x = self.robot_center_x - self.cent_precision
 
     def display(self):
         """Display Configuration values."""
