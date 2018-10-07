@@ -120,7 +120,7 @@ def CenterOn(obj_name,com,pipeline,img_handler,config):
                 rotate = 0
                 coordinates = Where_is(obj_name,color_frame,img_handler,config)
         else:
-            centered = Rotate_towards(obj_name,com,color_frame,config)
+            centered = Rotate_towards(obj_name,com,coordinates,config)
 
 
 def GoTowards(obj_name,com,pipeline,img_handler,config,until,vel):
