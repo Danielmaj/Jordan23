@@ -225,7 +225,12 @@ def main():
 
     Aling_Basket_Ball(com,pipeline,img_handler,config)
 
-    GoTowards('ball',com,pipeline,img_handler,config,until=0.34,vel=5)
+    GoTowards('ball',com,pipeline,img_handler,config,until=0.36,vel=5)
+
+    for i in range(10):
+        move(com,wheelspeeds(vel,90,0))
+        time.sleep(config.wait_time)
+
 
     #Launch the ball
     #Launch the ball
