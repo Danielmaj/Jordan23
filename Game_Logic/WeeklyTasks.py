@@ -164,10 +164,10 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
             xb,yb = coordinates_ball
 
             if xb > config.max_cent_x:
-               ang_vel = -config.around_ang_vel
+               ang_vel = config.around_ang_vel
                ball_align = False
             elif xb < config.min_cent_x:
-               ang_vel = config.around_ang_vel
+               ang_vel = -config.around_ang_vel
                ball_align = False
             else:
                ballalign = True
