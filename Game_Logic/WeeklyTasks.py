@@ -181,11 +181,11 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
                 if xk > config.max_bask_x:
                     print("right")
                     print(ang_vel)
-                    move(com,wheelspeeds(15,180,ang_vel))
+                    move(com,wheelspeeds(5,0,ang_vel))
                 elif xk < config.min_bask_x:
                     print("left")
                     print(ang_vel)
-                    move(com,wheelspeeds(15,0,ang_vel))
+                    move(com,wheelspeeds(5,180,ang_vel))
                 else:
                    move(com,stop())
                    align = True
