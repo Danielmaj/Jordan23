@@ -157,7 +157,6 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
 
         if coordinates_ball == None:
             CenterOn('ball',com,pipeline,img_handler,config)
-            GoTowards('ball',com,pipeline,img_handler,config,until=0.4,vel=15)
 
         else:
 
@@ -172,21 +171,24 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
 
             if coordinates_basket == None:
 
-                move(com,wheelspeeds(10,0,ang_vel))
+                move(com,wheelspeeds(10,180,ang_vel))
                 time.sleep(config.wait_time)
 
             else:
 
                 xk,yk = coordinates_basket
-
+                move(com,stop())
+                align = True
+                break
+                
                 if xk > config.max_bask_x:
                     print("right")
                     print(ang_vel)
-                    move(com,wheelspeeds(5,180,ang_vel))
+                    move(com,wheelspeeds(5,0,ang_vel))
                 elif xk < config.min_bask_x:
                     print("left")
                     print(ang_vel)
-                    move(com,wheelspeeds(5,0,ang_vel))
+                    move(com,wheelspeeds(5,180,ang_vel))
                 else:
                    move(com,stop())
                    align = True
