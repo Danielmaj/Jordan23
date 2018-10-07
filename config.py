@@ -53,8 +53,8 @@ class Config(object):
 
     #Parameters to locate the Basket
     # basket blue
-    lower_blue = np.array([97, 100, 0])
-    upper_blue = np.array([116, 255, 255])
+    lower_blue = np.array([97, 100, 20])
+    upper_blue = np.array([116, 255, 169])
 
     # basket magenta
     lower_magenta = np.array([169, 130, 105])
