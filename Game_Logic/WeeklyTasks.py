@@ -188,7 +188,7 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
                     print(ang_vel)
                     move(com,wheelspeeds(5,180,ang_vel))
                 else:
-                 if ball_align
+                 if ball_align:
                    move(com,stop())
                    align = True
                    print("Basket x",xk)
