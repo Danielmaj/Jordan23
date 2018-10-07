@@ -197,7 +197,7 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
                         print("Ball x",xb)
                     else:
 
-                        move(com,wheelspeeds(0,0,5*ang_vel))
+                        move(com,wheelspeeds(0,0,ang_vel))
                         print("aligning with ball",ang_vel)
 
                 time.sleep(config.wait_time)
