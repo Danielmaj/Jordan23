@@ -233,6 +233,7 @@ def main():
 
 
     #Launch the ball
+    time.sleep(10)
     print("Launch the ball")
     thrower(com,2000)
     time.sleep(10)
