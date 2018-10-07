@@ -27,7 +27,7 @@ class Config(object):
     robot_center_x = 360
 
     # Center Basket in the frame
-    bask_center_x = 320
+    bask_center_x = 380
 
 
     # How many frames to wait before starting to rotate again to locate some object
@@ -66,8 +66,8 @@ class Config(object):
         # Maximum x to consider the robot centred respect to an object
         self.max_cent_x = self.robot_center_x + self.cent_precision
         self.min_cent_x = self.robot_center_x - self.cent_precision
-        self.max_bask_x = self.bask_center_x + 5
-        self.min_bask_x = self.bask_center_x - 5
+        self.max_bask_x = self.bask_center_x + 10
+        self.min_bask_x = self.bask_center_x - 10
 
     def display(self):
         """Display Configuration values."""
