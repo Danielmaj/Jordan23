@@ -35,7 +35,7 @@ def LocateBasket(frame,color,config):
 
         # only proceed if the basket meets a minimum size
         if width*height > 6:
-            center = (x, y)
+            center = (int(x), int(y))
     return center
 
 
@@ -201,6 +201,8 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
                 else:
                    move(com,stop())
                    align = True
+                   print("Basket x",xk)
+                   print("Ball x",xb)
 
                 time.sleep(config.wait_time)
 
@@ -230,7 +232,7 @@ def main():
 
     #Launch the ball
     #Launch the ball
-    com.launch_motor(self, 2000)
+    #com.launch_motor(2000)
 
     pipeline.stop()
     com.close()
