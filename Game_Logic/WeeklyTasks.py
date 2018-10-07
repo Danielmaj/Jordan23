@@ -156,7 +156,7 @@ def ang_vel_towards(obj_name,com,coordinates,config):
     return ang_vel
 
 
-def Aling_Basket_Ball(com,coordinates,pipeline,img_handler,config):
+def Aling_Basket_Ball(com,pipeline,img_handler,config):
     #Todo add constants to config
     align = False
 
