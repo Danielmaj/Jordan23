@@ -82,23 +82,12 @@ def Where_is(obj_name,color_frame,img_handler,config):
 
     coordinates = None
     color_image = np.asanyarray(color_frame.get_data())
+    print(color_image.shape)
 
     if obj_name == 'ball':
         coordinates = img_handler.LocateBallCenter(color_image)
     else:
         coordinates = LocateBasket(color_image,"blue",config)
-
-    return coordinates
-
-def Rotate_to_see(obj_name,color_frame,config):
-
-    coordinates = None
-    color_image = np.asanyarray(color_frame.get_data())
-
-    coordinates = Where_is('ball',color_frame,config)
-
-    if coordinates == None:
-        move(com,left(rot_vel))
 
     return coordinates
 
@@ -216,17 +205,19 @@ def main():
     pipeline = Start_Pipeline(config)
     img_handler = Image_Handler()
 
-    steps_forward = 50
+    Where_is("basket",color_frame,img_handler,config)
 
-    for i in range(steps_forward):
-        move(com,wheelspeeds(15,90,0))
-        time.sleep(config.wait_time)
+    #steps_forward = 50
 
-    CenterOn('ball',com,pipeline,img_handler,config)
+    #for i in range(steps_forward):
+    #    move(com,wheelspeeds(15,90,0))
+    #    time.sleep(config.wait_time)
 
-    GoTowards('ball',com,pipeline,img_handler,config,until=0.4,vel=15)
+    #CenterOn('ball',com,pipeline,img_handler,config)
 
-    Aling_Basket_Ball(com,pipeline,img_handler,config)
+    #GoTowards('ball',com,pipeline,img_handler,config,until=0.4,vel=15)
+
+    #Aling_Basket_Ball(com,pipeline,img_handler,config)
 
     #GoTowards('ball',com,pipeline,img_handler,config,until=0.2,vel=5)
 
