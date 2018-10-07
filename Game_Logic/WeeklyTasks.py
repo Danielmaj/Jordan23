@@ -125,6 +125,7 @@ def GoTowards(obj_name,com,pipeline,img_handler,config,until,vel):
         else:
             x,y = coordinates
             dist = depth_frame.get_distance(int(x),int(y))
+            print(dist)
             if dist > until:
                 move(com,wheelspeeds(vel,90,0))
             elif dist > 0.1:
