@@ -192,9 +192,11 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
 
                 if xk > config.max_cent_x:
                     print("right")
+                    print(ang_vel)
                     move(com,wheelspeeds(10,180,ang_vel))
                 elif xk < config.min_cent_x:
                     print("left")
+                    print(ang_vel)
                     move(com,wheelspeeds(10,0,ang_vel))
                 else:
                    move(com,stop())
