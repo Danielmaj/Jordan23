@@ -44,8 +44,8 @@ def Start_Pipeline(config):
     # Configure depth and color streams
     pipeline = rs.pipeline()
     rsconfig = rs.config()
-    rsconfig.enable_stream(rs.stream.depth, config.frame_width, config.frame_heigth, rs.format.z16, 30)
-    rsconfig.enable_stream(rs.stream.color, config.frame_width, config.frame_heigth, rs.format.bgr8, 30)
+    rsconfig.enable_stream(rs.stream.depth, config.frame_width, config.frame_heigth, rs.format.z16, 60)
+    rsconfig.enable_stream(rs.stream.color, config.frame_width, config.frame_heigth, rs.format.bgr8, 60)
     # Start streaming
     pipeline.start(rsconfig)
 
@@ -205,6 +205,7 @@ def main():
     pipeline = Start_Pipeline(config)
     img_handler = Image_Handler()
 
+    color_frame,depth_frame = Get_frames(pipeline)
     Where_is("basket",color_frame,img_handler,config)
 
     #steps_forward = 50
