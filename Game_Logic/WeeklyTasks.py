@@ -83,7 +83,6 @@ def Where_is(obj_name,color_frame,img_handler,config):
 
     coordinates = None
     color_image = np.asanyarray(color_frame.get_data())
-    print(color_image.shape)
 
     if obj_name == 'ball':
         coordinates = img_handler.LocateBallCenter(color_image)
@@ -205,9 +204,6 @@ def main():
     config = Config()
     pipeline = Start_Pipeline(config)
     img_handler = Image_Handler()
-
-    color_frame,depth_frame = Get_frames(pipeline)
-    Where_is("basket",color_frame,img_handler,config)
 
     steps_forward = 50
 
