@@ -30,7 +30,7 @@ class Config(object):
     rot_wait =  10
 
     # velocity of Rotation to locate object
-    rot_vel =  20
+    rot_vel =  12
 
     # Precision of rotation centering on object. Error allowed in pixels when rotating centering on an object
     cent_precision = 15
