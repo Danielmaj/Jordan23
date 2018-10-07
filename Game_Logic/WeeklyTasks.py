@@ -119,8 +119,8 @@ def CenterOn(obj_name,com,pipeline,img_handler,config):
                 move(com,left(config.rot_vel))
                 time.sleep(config.wait_time)
                 rotate = 0
-                coordinates = Where_is(obj_name,color_frame,img_handler,config)
         else:
+            print("Coordinates",coordinates)
             centered = Rotate_towards(obj_name,com,coordinates,config)
 
 
