@@ -220,7 +220,7 @@ def main():
 
     CenterOn('ball',com,pipeline,img_handler,config)
 
-    GoTowards('ball',com,pipeline,img_handler,config,until=0.3,vel=15)
+    GoTowards('ball',com,pipeline,img_handler,config,until=0.35,vel=15)
 
     Aling_Basket_Ball(com,pipeline,img_handler,config)
 
