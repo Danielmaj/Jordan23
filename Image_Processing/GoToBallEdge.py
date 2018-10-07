@@ -38,6 +38,9 @@ img_handler = Image_Handler()
 rotate=0
 centred = False
 try:
+    for i in range(80):
+        move(com,wheelspeeds(15,90,0)) #Forward
+        sleep(0.1)
     while True:
 
         # Wait for a coherent pair of frames: depth and color

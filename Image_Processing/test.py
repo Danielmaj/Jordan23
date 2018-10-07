@@ -55,6 +55,11 @@ pipeline.start(config)
 
 greenLower = (60,100,100)
 greenUpper = (90, 200, 160)
+
+greenLower = (25,110,56)
+greenUpper = (90,255,146)
+greenLower = (40,100,40)
+greenUpper = (90,255,255)
 def UpdateLower_Upper():
 	global greenLower,greenUpper
         while True:

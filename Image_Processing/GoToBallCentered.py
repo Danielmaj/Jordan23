@@ -38,6 +38,11 @@ rotate=0
 
 centred = False
 try:
+    for i in range(80):
+        move(com,wheelspeeds(15,90,0)) #Forward
+        sleep(0.1)
+		     	
+    move(com,stop())
     while True:
 
         # Wait for a coherent pair of frames: depth and color
@@ -81,7 +86,7 @@ try:
                      if dist > 0.01:
 			move(com,stop())
                    	break
-                sleep(0.01)
+                sleep(0.1)
 
         # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
         #depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
@@ -99,3 +104,4 @@ finally:
     print('Finish')
     pipeline.stop()
     com.close()
+
