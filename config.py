@@ -45,7 +45,7 @@ class Config(object):
     corner_omni_vel = np.array([15, 90, 0])
 
     # Parameters to rotate around the Ball
-    around_ang_vel = 100
+    around_ang_vel = 30
 
     #Parameters to locate the Basket
     # basket blue
