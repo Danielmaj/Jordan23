@@ -177,24 +177,22 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
             else:
 
                 xk,yk = coordinates_basket
-                move(com,stop())
-                align = True
-                break
-                
+
                 if xk > config.max_bask_x:
                     print("right")
                     print(ang_vel)
-                    move(com,wheelspeeds(5,0,ang_vel))
+                    move(com,wheelspeeds(15,180,ang_vel))
                 elif xk < config.min_bask_x:
                     print("left")
                     print(ang_vel)
-                    move(com,wheelspeeds(5,180,ang_vel))
+                    move(com,wheelspeeds(15,0,ang_vel))
                 else:
                    move(com,stop())
                    align = True
                    print("Basket x",xk)
                    print("Ball x",xb)
 
+                align = True
                 time.sleep(config.wait_time)
 
 
