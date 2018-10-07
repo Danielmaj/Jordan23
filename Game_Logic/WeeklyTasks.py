@@ -227,14 +227,14 @@ def main():
 
     GoTowards('ball',com,pipeline,img_handler,config,until=0.36,vel=5)
 
-    for i in range(10):
-        move(com,wheelspeeds(vel,90,0))
+    for i in range(20):
+        move(com,wheelspeeds(10,90,0))
         time.sleep(config.wait_time)
 
 
     #Launch the ball
     #Launch the ball
-    #com.launch_motor(2000)
+    com.launch_motor(2000)
 
     pipeline.stop()
     com.close()
