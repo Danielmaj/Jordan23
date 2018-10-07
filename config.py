@@ -27,7 +27,7 @@ class Config(object):
     robot_center_x = 360
 
     # Center Basket in the frame
-    bask_center_x = 380
+    bask_center_x = 320
 
 
     # How many frames to wait before starting to rotate again to locate some object
