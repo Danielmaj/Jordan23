@@ -167,6 +167,7 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
             elif xb < config.min_cent_x:
                ang_vel = config.around_ang_vel
             else:
+               ballalign = True
                ang_vel = 0
 
             if coordinates_basket == None:
@@ -187,10 +188,13 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
                     print(ang_vel)
                     move(com,wheelspeeds(5,180,ang_vel))
                 else:
+                 if ball_align
                    move(com,stop())
                    align = True
                    print("Basket x",xk)
                    print("Ball x",xb)
+                 else
+                   move(com,wheelspeeds(0,180,ang_vel))
 
                 time.sleep(config.wait_time)
 
