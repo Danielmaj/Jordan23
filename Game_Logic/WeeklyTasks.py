@@ -190,11 +190,11 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
 
                 xk,yk = coordinates_basket
 
-                if xk > config.max_cent_x:
+                if xk > config.max_cent_x - 5:
                     print("right")
                     print(ang_vel)
                     move(com,wheelspeeds(10,180,ang_vel))
-                elif xk < config.min_cent_x:
+                elif xk < config.min_cent_x + 5:
                     print("left")
                     print(ang_vel)
                     move(com,wheelspeeds(10,0,ang_vel))
