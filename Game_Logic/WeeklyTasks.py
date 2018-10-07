@@ -197,7 +197,7 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
                         print("Basket x",xk)
                         print("Ball x",xb)
                     else:
-                        move(com,wheelspeeds(0,180,ang_vel))
+                        move(com,wheelspeeds(0,180,ang_vel/2))
 
                 time.sleep(config.wait_time)
 
