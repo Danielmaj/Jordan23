@@ -183,7 +183,7 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
 
             if coordinates_basket == None:
 
-                move(com,wheelspeeds(10,180,ang_vel))
+                move(com,wheelspeeds(10,0,ang_vel))
                 time.sleep(config.wait_time)
 
             else:
