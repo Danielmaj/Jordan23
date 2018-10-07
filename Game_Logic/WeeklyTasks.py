@@ -133,7 +133,7 @@ def GoTowards(obj_name,com,pipeline,img_handler,config,until,vel):
         coordinates = Where_is(obj_name,color_frame,img_handler,config)
 
         if coordinates == None:
-            CenterOn(obj_name,com,pipeline,config)
+            CenterOn(obj_name,com,pipeline,img_handler,config)
         else:
             x,y = coordinates
             dist = depth_frame.get_distance(int(x),int(y))
