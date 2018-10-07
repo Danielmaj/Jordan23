@@ -226,6 +226,7 @@ def main():
     GoTowards('ball',com,pipeline,until=0.2,vel=5)
 
     #Launch the ball
+    #Launch the ball
     com.launch_motor(self, 2000)
 
     pipeline.stop()
