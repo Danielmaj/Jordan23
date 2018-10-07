@@ -235,6 +235,8 @@ def main():
     #Launch the ball
     #Launch the ball
     com.launch_motor(2000)
+    time.sleep(1)
+
 
     pipeline.stop()
     com.close()
