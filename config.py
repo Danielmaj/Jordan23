@@ -23,8 +23,8 @@ class Config(object):
     frame_width = 640
     frame_heigth = 480
 
-    # Center of robot in the frame
-    robot_center_x = 360
+    # Center of ball in the frame
+    robot_center_x = 340
 
     # Center Basket in the frame
     bask_center_x = 320
