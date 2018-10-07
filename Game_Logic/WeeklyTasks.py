@@ -78,7 +78,7 @@ def Rotate_towards(obj_name,com,coordinates,config):
     return centred
 
 
-def Where_is(obj_name,color_frame,config):
+def Where_is(obj_name,color_frame,img_handler,config):
 
     coordinates = None
     color_image = np.asanyarray(color_frame.get_data())
@@ -103,7 +103,7 @@ def Rotate_to_see(obj_name,color_frame,config):
     return coordinates
 
 
-def CenterOn(obj_name,com,pipeline,config):
+def CenterOn(obj_name,com,pipeline,img_handler,config):
 
     centered = False
 
@@ -123,7 +123,7 @@ def CenterOn(obj_name,com,pipeline,config):
             centered = Rotate_towards(obj_name,com,color_frame,config)
 
 
-def GoTowards(obj_name,com,pipeline,config,until,vel):
+def GoTowards(obj_name,com,pipeline,img_handler,config,until,vel):
 
     near = False
     while not near:
@@ -154,7 +154,7 @@ def ang_vel_towards(obj_name,com,coordinates,config):
     return ang_vel
 
 
-def Aling_Basket_Ball(com,coordinates,pipeline,config):
+def Aling_Basket_Ball(com,coordinates,pipeline,img_handler,config):
     #Todo add constants to config
     align = False
 
@@ -166,8 +166,8 @@ def Aling_Basket_Ball(com,coordinates,pipeline,config):
         xk,yk = coordinates_basket
 
         if coordinates_ball == None:
-            CenterOn('ball',com,pipeline,config)
-            GoTowards('ball',com,pipeline,config,until=0.4,vel=15)
+            CenterOn('ball',com,pipeline,img_handler,config)
+            GoTowards('ball',com,pipeline,img_handler,config,until=0.4,vel=15)
 
         else:
 
@@ -215,11 +215,11 @@ def main():
         move(com,wheelspeeds(15,90,0))
         time.sleep(config.wait_time)
 
-    CenterOn('ball',com,pipeline,config)
+    CenterOn('ball',com,pipeline,img_handler,config)
 
-    GoTowards('ball',com,pipeline,config,until=0.4,vel=15)
+    GoTowards('ball',com,pipeline,img_handler,config,until=0.4,vel=15)
 
-    Aling_Basket_Ball(com,coordinates,pipeline,config)
+    Aling_Basket_Ball(com,coordinates,pipeline,img_handler,config)
 
     GoTowards('ball',com,pipeline,until=0.2,vel=5)
 
