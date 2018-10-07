@@ -210,7 +210,7 @@ def main():
     pipeline = Start_Pipeline(config)
     img_handler = Image_Handler()
 
-    steps_forward = 20
+    steps_forward = 50
 
     for i in range(steps_forward):
         move(com,wheelspeeds(15,90,0))
