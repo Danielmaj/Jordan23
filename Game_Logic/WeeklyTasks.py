@@ -221,7 +221,7 @@ def main():
 
     GoTowards('ball',com,pipeline,img_handler,config,until=0.4,vel=15)
 
-    Aling_Basket_Ball(com,coordinates,pipeline,img_handler,config)
+    Aling_Basket_Ball(com,pipeline,img_handler,config)
 
     GoTowards('ball',com,pipeline,until=0.2,vel=5)
 
