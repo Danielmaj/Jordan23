@@ -37,7 +37,7 @@ class Config(object):
     rot_vel =  12
 
     # Precision of rotation centering on object. Error allowed in pixels when rotating centering on an object
-    cent_precision = 15
+    cent_precision = 10
 
     # Velocity of centering on an object
     cent_vel = 5
