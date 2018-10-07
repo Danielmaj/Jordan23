@@ -232,7 +232,11 @@ def main():
         time.sleep(config.wait_time)
 
 
-    #Launch the ball
+    # ball inside
+    print("Launch the ball")
+    thrower(com,500)
+    time.sleep(10)
+
     #Launch the ball
     print("Launch the ball")
     thrower(com,1600)
