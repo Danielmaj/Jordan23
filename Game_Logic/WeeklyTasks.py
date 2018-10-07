@@ -148,6 +148,7 @@ def ang_vel_towards(obj_name,com,coordinates,config):
 def Aling_Basket_Ball(com,pipeline,img_handler,config):
     #Todo add constants to config
     align = False
+    ball_align = False
 
     while not align:
 
@@ -164,8 +165,10 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
 
             if xb > config.max_cent_x:
                ang_vel = -config.around_ang_vel
+               ball_align = False
             elif xb < config.min_cent_x:
                ang_vel = config.around_ang_vel
+               ball_align = False
             else:
                ballalign = True
                ang_vel = 0
