@@ -107,6 +107,7 @@ def CenterOn(obj_name,com,pipeline,img_handler,config):
 
     centered = False
 
+    rotate = 0
     while not centered:
 
         color_frame,depth_frame = Get_frames(pipeline)
