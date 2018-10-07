@@ -191,9 +191,11 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
                 xk,yk = coordinates_basket
 
                 if xk > config.max_cent_x:
-                    move(com,wheelspeeds(5,180,ang_vel))
+                    print("right")
+                    move(com,wheelspeeds(10,180,ang_vel))
                 elif xk < config.min_cent_x:
-                    move(com,wheelspeeds(5,0,ang_vel))
+                    print("left")
+                    move(com,wheelspeeds(10,0,ang_vel))
                 else:
                    move(com,stop())
                    align = True
