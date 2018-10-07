@@ -140,6 +140,7 @@ def GoTowards(obj_name,com,pipeline,img_handler,config,until,vel):
             if dist > until:
                 move(com,wheelspeeds(vel,90,0))
             elif dist > 0.1:
+                near = True
                 move(com,stop())
             time.sleep(config.wait_time)
 
