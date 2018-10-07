@@ -234,7 +234,7 @@ def main():
 
     #Launch the ball
     #Launch the ball
-    com.thrower(2000)
+    thrower(1500)
     time.sleep(1)
 
 
