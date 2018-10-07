@@ -192,7 +192,6 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
                    print("Basket x",xk)
                    print("Ball x",xb)
 
-                align = True
                 time.sleep(config.wait_time)
 
 
