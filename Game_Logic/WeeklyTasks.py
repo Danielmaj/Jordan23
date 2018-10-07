@@ -165,7 +165,6 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
         color_frame,depth_frame = Get_frames(pipeline)
         coordinates_basket = Where_is("basket",color_frame,img_handler,config)
         coordinates_ball = Where_is("ball",color_frame,img_handler,config)
-        xk,yk = coordinates_basket
 
         if coordinates_ball == None:
             CenterOn('ball',com,pipeline,img_handler,config)
@@ -189,11 +188,11 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
 
             else:
 
-                xbk,ybk = coordinates_basket
+                xk,yk = coordinates_basket
 
-                if xbk > config.max_cent_x:
+                if xk > config.max_cent_x:
                     move(com,wheelspeeds(5,180,ang_vel))
-                elif xbk < config.min_cent_x:
+                elif xk < config.min_cent_x:
                     move(com,wheelspeeds(5,0,ang_vel))
                 else:
                    move(com,stop())
