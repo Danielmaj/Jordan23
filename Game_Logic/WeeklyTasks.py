@@ -190,14 +190,14 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
 
                 xk,yk = coordinates_basket
 
-                if xk > config.max_cent_x - 5:
+                if xk > config.max_bask_x:
                     print("right")
                     print(ang_vel)
-                    move(com,wheelspeeds(10,180,ang_vel))
-                elif xk < config.min_cent_x + 5:
+                    move(com,wheelspeeds(5,180,ang_vel))
+                elif xk < config.min_bask_x:
                     print("left")
                     print(ang_vel)
-                    move(com,wheelspeeds(10,0,ang_vel))
+                    move(com,wheelspeeds(5,0,ang_vel))
                 else:
                    move(com,stop())
                    align = True
