@@ -24,7 +24,7 @@ class Config(object):
     frame_heigth = 480
 
     # Center of robot in the frame
-    robot_center_x = 370
+    robot_center_x = 360
 
     # How many frames to wait before starting to rotate again to locate some object
     rot_wait =  10
