@@ -224,7 +224,7 @@ def main():
 
     Aling_Basket_Ball(com,pipeline,img_handler,config)
 
-    #GoTowards('ball',com,pipeline,img_handler,config,until=0.2,vel=5)
+    GoTowards('ball',com,pipeline,img_handler,config,until=0.37,vel=5)
 
     #Launch the ball
     #Launch the ball
