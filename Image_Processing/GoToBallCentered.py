@@ -21,9 +21,9 @@ def Rotate_towards_ball(coordinates):
     x,y = coordinates
     centred = False
     #com.launch_motor(100)
-    if x > 385:
+    if x > 330:
        move(com,right(vel))
-    elif x < 355:
+    elif x < 310:
        move(com,left(vel))
     else:
        print('we arrived =-==------------=========')
@@ -35,7 +35,6 @@ def Rotate_towards_ball(coordinates):
 pipeline.start(config)
 img_handler = Image_Handler()
 rotate=0
-
 centred = False
 try:
     for i in range(80):
@@ -61,8 +60,8 @@ try:
                print('rotating',rotate)
                rotate+=1
                if rotate==10:
-                   move(com,left(5))
-     		   rotate=0
+                   move(com,left(20))
+                   rotate=0
             else:
                rotate=0
                centred = Rotate_towards_ball(coordinates)
@@ -75,14 +74,12 @@ try:
                 depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
                 #dist = img_handler.howfar(depth_frame,coordinates)
                 x,y = coordinates
-		dist = depth_frame.get_distance(int(x),int(y))
+		        dist = depth_frame.get_distance(int(x),int(y))
                 print("Distance:",dist)
-                if dist > 0.4:
-		    stp = 0	
+                if dist > 0.3:
                     move(com,wheelspeeds(15,90,0)) #Forward
                 	#move(com,forward(-10))
 		else:
-		     	
                      if dist > 0.01:
 			move(com,stop())
                    	break

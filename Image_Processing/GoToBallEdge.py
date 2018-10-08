@@ -22,9 +22,9 @@ def Rotate_towards_ball(coordinates):
     x,y = coordinates
     centred = False
     #com.launch_motor(100)
-    if x > 580:
+    if x > 540:
        move(com,right(vel))
-    elif x < 100:
+    elif x < 120:
        move(com,left(vel))
     else:
        print('we arrived =-==------------=========')
@@ -59,7 +59,7 @@ try:
                print('rotating',rotate)
                rotate+=1
                if rotate==10:
-                   move(com,left(5))
+                   move(com,left(20))
                    rotate=0
             else:
 		rotate = 0
@@ -75,16 +75,15 @@ try:
                 print("distance",dist)
 		if dist > 0.3:
                     print("moving towards the ball")
-		    dx = (x -370)/320
-                    angle_to_ball = 90 + 12*dx
-		    move(com,wheelspeeds(10,angle_to_ball,0)) #Forward
+		    dx = (x -320)/320
+                    angle_to_ball = 90 + 20*dx
+		    move(com,wheelspeeds(5,angle_to_ball,0)) #Forward
                     #move(com,forward(-10))
 		else:
-                    if dist > 0.1:
-			print("stoped")
+                    if dist > 0.01:
 		        move(com,stop())
                    	break
-                sleep(0.1)
+                sleep(0.01)
 
         # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
         #depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
