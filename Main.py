@@ -14,11 +14,16 @@ def CreateConnection():
     return com
 
 def Test_motors(com):
-    thrower(com,1000)
-    sleep(1)
-    thrower(com,1500)
-    sleep(1)
-    thrower(com,2000)
+    move(com,wheelspeeds(10,90,0))
+
+    #thrower(com,1500)
+    #com.write("d:{}".format(2000))
+    
+    #thrower(com,2000)
+    com.Readmsgs(verbos=True)
+    #thrower(com,1500)
+    #sleep(1)
+    #thrower(com,2000)
     #move(com,stop())
     #for i in range(3):
     #   move(com,left(30))
