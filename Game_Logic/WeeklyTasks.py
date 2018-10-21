@@ -9,35 +9,6 @@ from Hardware.Motor import *
 from config import Config
 from time import sleep
 
-def LocateBasket(frame,color,config):
-
-    if color == "blue":
-        low = config.lower_blue
-        up = config.upper_blue
-    else:
-        low = config.lower_magenta
-        up = config.upper_magenta
-
-
-    blurred = cv2.GaussianBlur(frame, (11, 11), 0)
-    hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
-
-    mask = cv2.inRange(hsv, low, up)
-    mask = cv2.erode(mask, None, iterations=1)
-    mask = cv2.dilate(mask, None, iterations=1)
-
-    cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
-                            cv2.CHAIN_APPROX_SIMPLE)[-2]
-    center = None
-    if len(cnts) > 0:
-
-        c = max(cnts, key=cv2.contourArea)
-        x, y, w, h = cv2.boundingRect(c)
-        # only proceed if the basket meets a minimum size
-        if w*h > 20:
-            center = (int(x), int(y))
-    return center
-
 
 def Start_Pipeline(config):
 
@@ -86,7 +57,7 @@ def Where_is(obj_name,color_frame,img_handler,config):
     if obj_name == 'ball':
         coordinates = img_handler.LocateBallCenter(color_image)
     else:
-        coordinates = LocateBasket(color_image,"blue",config)
+        coordinates = Image_Handler.LocateBasket(color_image,"blue",config)
 
     return coordinates
 

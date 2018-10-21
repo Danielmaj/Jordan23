@@ -9,10 +9,7 @@ class Image_Handler():
         # define the lower and upper boundaries of the "green"
         # ball in the HSV color space, then initialize the
         # list of tracked points
-        #greenLower = (29, 86, 6)
-        #greenUpper = (64, 255, 255)
-        #greenLower = (40,40,40)
-        #greenUpper = (70, 255, 255)
+
     	greenLower = (35,208,90)
    	    greenUpper = (58,255,169)
 
@@ -48,27 +45,32 @@ class Image_Handler():
                 center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
         return center
 
-    def howfar(self,depth_frame,coordinates):
-        '''Returns the distance  in mm around a center point a square of size s'''
-        '''The camera is inclined so this brings some problems '''
 
-        size = 5
-        cam_angle = 5
-        cam_height = 200
+    def LocateBasket(frame,color,config):
 
-        # Distance from the camera plane(not camera center) to the object in mm
-        xc,yc = coordinates
+        if color == "blue":
+            low = config.lower_blue
+            up = config.upper_blue
+        else:
+            low = config.lower_magenta
+            up = config.upper_magenta
 
-        xmin = max(xc-size,0)
-        xmax = min(xc+size,640)
-        ymin = max(yc-size,0)
-        ymax = min(yc+size,480)
 
-        avg_dist = 0
-        for x in range(xmin, xmax):
-            for y in range(ymin, ymax):
-                depth = depth_frame.get_distance(x,y)
-                avg_dist +=  depth_frame.get_distance(x,y)
-        avg_dist /= (xmax - xmin + ymax - ymin)
-        # Distance respect to the camera
-        return avg_dist
+        blurred = cv2.GaussianBlur(frame, (11, 11), 0)
+        hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
+
+        mask = cv2.inRange(hsv, low, up)
+        mask = cv2.erode(mask, None, iterations=1)
+        mask = cv2.dilate(mask, None, iterations=1)
+
+        cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
+                                cv2.CHAIN_APPROX_SIMPLE)[-2]
+        center = None
+        if len(cnts) > 0:
+
+            c = max(cnts, key=cv2.contourArea)
+            x, y, w, h = cv2.boundingRect(c)
+            # only proceed if the basket meets a minimum size
+            if w*h > 20:
+                center = (int(x), int(y))
+        return center
