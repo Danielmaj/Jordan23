@@ -16,8 +16,8 @@ def move(com,vel):
     com.write("sd:{}:{}:{}".format(vel[0],vel[1],vel[2]))
     com.Readmsgs()
 
-def thrower(com,value):
-    com.write("d:{}".format(value))
+def thrower(com,val):
+    com.write("d:{}".format(val))
     com.Readmsgs()
 
 def move_command(vel):

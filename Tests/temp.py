@@ -19,10 +19,12 @@ try:
         frames = pipeline.wait_for_frames()
         depth_frame = frames.get_depth_frame()
         color_frame = frames.get_color_frame()
+
         if not depth_frame or not color_frame:
             continue
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_250)
+        color_image = np.asanyarray(color_frame.get_data())
+        gray = cv2.cvtColor(color_image, cv2.COLOR_BGR2GRAY)
+        aruco_dict = aruco.Dictionary_get(aruco.DICT_7X7_160)
         parameters =  aruco.DetectorParameters_create()
         corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
         print(corners)

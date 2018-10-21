@@ -62,9 +62,11 @@ class ComportMainboard(threading.Thread):
 
     def Readmsgs(self,verbos=False):
 	try:
-	    self.connection.flush()
+            self.connection.flush()
+            txt = self.connection.readline()
             if verbos:
-	        print(self.connection.readline())
+                print(txt)
+            return txt
 	except Exception as ex:
 	    print(ex)
 

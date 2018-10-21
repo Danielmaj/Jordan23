@@ -184,7 +184,7 @@ def main():
     pipeline = Start_Pipeline(config)
     img_handler = Image_Handler()
 
-    steps_forward = 150
+    steps_forward = 100
 
     for i in range(steps_forward):
         move(com,wheelspeeds(15,90,0))
@@ -196,11 +196,12 @@ def main():
 
     Aling_Basket_Ball(com,pipeline,img_handler,config)
 
-    #GoTowards('ball',com,pipeline,img_handler,config,until=0.36,vel=5)
+    GoTowards('ball',com,pipeline,img_handler,config,until=0.36,vel=5)
 
-    #for i in range(30):
-    #    move(com,wheelspeeds(15,90,0))
-    #    time.sleep(config.wait_time)
+    for i in range(30):
+        move(com,wheelspeeds(15,90,0))
+        time.sleep(config.wait_time)
+        thrower(com,1700)
 
 
     #Launch the ball

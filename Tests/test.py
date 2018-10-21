@@ -36,9 +36,6 @@ def click(event, x, y, flags, param):
 	if event == cv2.EVENT_LBUTTONDOWN:
 		positions = (x, y)
  
-#Connection to main board
-com = ComportMainboard()
-com.open()
 
 # Configure depth and color streams
 pipeline = rs.pipeline()
@@ -54,6 +51,11 @@ pipeline.start(config)
 
 greenLower = (60,100,100)
 greenUpper = (90, 200, 160)
+
+greenLower = (25,110,56)
+greenUpper = (90,255,146)
+greenLower = (40,100,40)
+greenUpper = (90,255,255)
 def UpdateLower_Upper():
 	global greenLower,greenUpper
         while True:
@@ -144,4 +146,3 @@ finally:
     print('am done with you')
     terminate_thread(update)
     pipeline.stop()
-    com.close()
