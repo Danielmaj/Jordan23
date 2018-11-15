@@ -27,6 +27,9 @@ class Image_Handler():
    	#greenUpper = (58,255,169)
         #greenLower = (40,100,40)
         #greenUpper = (90,255,255)
+        #Most recent
+    	#greenLower = (35,208,90)
+   	    #greenUpper = (58,255,169)
 
         # resize the frame, blur it, and convert it to the HSV
         # color space
@@ -56,9 +59,9 @@ class Image_Handler():
             ((x, y), radius) = cv2.minEnclosingCircle(c)
             M = cv2.moments(c)
             # only proceed if the radius meets a minimum size
-            if radius > 0:
+            if radius > 7:
                 center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
-        return center#,radius
+        return center
 
     def howfar(self,depth_frame,coordinates):
         '''Returns the distance  in mm around a center point a square of size s'''

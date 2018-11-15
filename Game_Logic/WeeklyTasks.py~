@@ -140,9 +140,9 @@ def GoTowards(obj_name,com,pipeline,img_handler,config,until,vel):
 def ang_vel_towards(obj_name,com,coordinates,config):
     x,y = coordinates
     if x > config.max_cent_x:
-       ang_vel = around_ang_vel
+       ang_vel = -around_ang_vel
     elif x < config.min_cent_x:
-       ang_vel = - around_ang_vel
+       ang_vel =  around_ang_vel
     else:
        print('Centered on:',obj_name)
     return ang_vel
@@ -167,10 +167,10 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
             xb,yb = coordinates_ball
 
             if xb > config.max_cent_x:
-               ang_vel = -config.around_ang_vel
+               ang_vel = config.around_ang_vel
                ball_align = False
             elif xb < config.min_cent_x:
-               ang_vel = config.around_ang_vel
+               ang_vel = -config.around_ang_vel
                ball_align = False
             else:
                ball_align = True
@@ -178,7 +178,7 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
 
             if coordinates_basket == None:
 
-                move(com,wheelspeeds(10,0,ang_vel))
+                move(com,wheelspeeds(10,180,ang_vel))
                 time.sleep(config.wait_time)
 
             else:
@@ -199,9 +199,6 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
                         align = True
                         print("Basket x",xk)
                         print("Ball x",xb)
-                        bas_dist = depth_frame.get_distance(xk,yk)
-                        print('dist:{}'.format(bas_dist))
-                        CalculateThrowerStrength(bas_dist)
                     else:
 
                         move(com,wheelspeeds(0,0,ang_vel))
@@ -209,43 +206,34 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
 
                 time.sleep(config.wait_time)
 
-Thrower_Strength = -1
-def CalculateThrowerStrength(dist):
-    global Thrower_Strength
-    #Thrower_Strength=int(14.558*dist + 158)
-    val = 14.558*dist + 158
-    Thrower_Strength= 7.55199*pow(dist,2)-20.3776*dist + 195.411
-    print('lin:{},poly:{}'.format(val,Thrower_Strength))
-    Thrower_Strength = int(Thrower_Strength)+1
 
 def main():
-    global Thrower_Strength
+
     com = ComportMainboard()
     com.open()
     config = Config()
     pipeline = Start_Pipeline(config)
     img_handler = Image_Handler()
-    
+
     steps_forward = 100
+
     for i in range(steps_forward):
         move(com,wheelspeeds(15,90,0))
         time.sleep(config.wait_time)
-    while True:
 
-        CenterOn('ball',com,pipeline,img_handler,config)
+    CenterOn('ball',com,pipeline,img_handler,config)
 
-        GoTowards('ball',com,pipeline,img_handler,config,until=0.4,vel=15)
+    GoTowards('ball',com,pipeline,img_handler,config,until=0.4,vel=15)
 
-        Aling_Basket_Ball(com,pipeline,img_handler,config)
+    Aling_Basket_Ball(com,pipeline,img_handler,config)
 
-        GoTowards('ball',com,pipeline,img_handler,config,until=0.36,vel=5)
-        print(Thrower_Strength)
-        for i in range(5):
-            move(com,wheelspeeds(15,90,0))
-            thrower(com,Thrower_Strength)
-            time.sleep(config.wait_time)
-        move(com,stop())
-        thrower(com,145)
+    GoTowards('ball',com,pipeline,img_handler,config,until=0.36,vel=5)
+
+    for i in range(30):
+        move(com,wheelspeeds(15,90,0))
+        time.sleep(config.wait_time)
+        thrower(com,160)
+
     #Launch the ball
     #time.sleep(10)
     #print("Launch the ball")

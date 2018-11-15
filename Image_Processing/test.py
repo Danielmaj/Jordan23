@@ -54,8 +54,8 @@ greenUpper = (90, 200, 160)
 
 greenLower = (25,110,56)
 greenUpper = (90,255,146)
-greenLower = (40,100,40)
-greenUpper = (90,255,255)
+#greenLower = (40,100,40)
+#greenUpper = (90,255,255)
 def UpdateLower_Upper():
 	global greenLower,greenUpper
         while True:
@@ -138,6 +138,7 @@ try:
             x = positions[0]
             y = positions[1]
             print(hsv[y,x][0],hsv[y,x][1],hsv[y,x][2])
+            print('y:{},x:{}'.format(y,x))
             positions=None
         cv2.waitKey(1)
 

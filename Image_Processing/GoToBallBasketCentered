@@ -60,11 +60,7 @@ try:
             else:
                rotate=0
                centred = Rotate_towards_ball(coordinates)
-<<<<<<< HEAD
             sleep(0.01)
-=======
-               sleep(0.01)
->>>>>>> 8d88163adf9b9ebe5f6431bb5f687ba407b5de3a
         else: # Go towards the ball
             if coordinates is None: #If you lose sight of the ball rotate again
                 centred = False

@@ -24,10 +24,10 @@ class Config(object):
     frame_heigth = 480
 
     # Center of ball in the frame
-    robot_center_x = 380
+    robot_center_x = 370
 
     # Center Basket in the frame
-    bask_center_x = 320
+    bask_center_x = 339
 
 
     # How many frames to wait before starting to rotate again to locate some object
@@ -37,7 +37,7 @@ class Config(object):
     rot_vel =  12
 
     # Precision of rotation centering on object. Error allowed in pixels when rotating centering on an object
-    cent_precision = 10
+    cent_precision = 8
 
     # Velocity of centering on an object
     cent_vel = 5
