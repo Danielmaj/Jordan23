@@ -1,4 +1,3 @@
-
 import pyrealsense2 as rs
 import numpy as np
 import cv2
@@ -61,7 +60,7 @@ def Where_is(obj_name,color_frame,img_handler,config):
     if obj_name == 'ball':
         coordinates = img_handler.LocateBallCenter(color_image)
     else:
-        coordinates = img_handler.LocateBasket(color_image,"blue",config)
+        coordinates = Image_Handler.LocateBasket(color_image,"blue",config)
 
     return coordinates
 
@@ -197,8 +196,9 @@ def main():
     config = Config()
     pipeline = Start_Pipeline(config)
     img_handler = Image_Handler()
-    steps_forward = 100
+    
 
+    steps_forward = 100
 
     for i in range(steps_forward):
         move(com,wheelspeeds(15,90,0))
@@ -209,8 +209,8 @@ def main():
         CenterOn('ball',com,pipeline,img_handler,config)
 
         GoTowards('ball',com,pipeline,img_handler,config,until=0.4,vel=15)
-
-        Aling_Basket_Ball(com,pipeline,img_handler,config)
+=======
+       Aling_Basket_Ball(com,pipeline,img_handler,config)
 
         GoTowards('ball',com,pipeline,img_handler,config,until=0.36,vel=5)
         print(Thrower_Strength)
@@ -232,5 +232,3 @@ def main():
     com.close()
 
 main()
-
-
