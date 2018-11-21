@@ -19,6 +19,9 @@ class Config(object):
     # experiment is running.
     NAME = 'basic'  # Override in sub-classes
 
+    My_Field_ID ='A'
+    My_ID = 'A'
+
     # Image form camera width and height
     frame_width = 640
     frame_heigth = 480
@@ -31,16 +34,16 @@ class Config(object):
 
 
     # How many frames to wait before starting to rotate again to locate some object
-    rot_wait =  10
+    rot_wait = 5
 
     # velocity of Rotation to locate object
-    rot_vel =  12
+    rot_vel =  20
 
     # Precision of rotation centering on object. Error allowed in pixels when rotating centering on an object
     cent_precision = 8
 
     # Velocity of centering on an object
-    cent_vel = 5
+    cent_vel = 10
 
     # Time to sleep between motor comands to avoid too many comands
     wait_time = 0.1
@@ -57,9 +60,11 @@ class Config(object):
     upper_blue = np.array([105, 255, 130])
 
     # basket magenta
-    lower_magenta = np.array([169, 130, 105])
-    upper_magenta = np.array([180, 255, 255])
+    #lower_magenta = np.array([169, 130, 105])
+    #upper_magenta = np.array([180, 255, 255])
 
+    lower_magenta = np.array([168, 116, 105])
+    upper_magenta = np.array([180, 255, 255])
 
     def __init__(self):
         """Set values of computed attributes."""

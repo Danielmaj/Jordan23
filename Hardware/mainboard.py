@@ -10,7 +10,9 @@ import rospy
 class ComportMainboard(threading.Thread):
     connection = None
     connection_opened = False
-
+    Myfield ='A'
+    My_ID = 'A'
+    in_action = False
     def __init__(self):
         threading.Thread.__init__(self)
 
@@ -36,6 +38,13 @@ class ComportMainboard(threading.Thread):
         return self.connection_opened
 
     def write(self, comm):
+        if ((self.connection is not None) and self.in_action):
+            try:
+                self.connection.write(comm + '\n')
+            except:
+                print('mainboard: err write ' + comm)
+
+    def write_ref(self, comm):
         if self.connection is not None:
             try:
                 self.connection.write(comm + '\n')
@@ -44,11 +53,11 @@ class ComportMainboard(threading.Thread):
 
     def servo(self, value):
         msg = "v{}".format(value)
-        if self.connection_opened:
+        if self.connection_opened and self.in_action:
             self.write(msg)
 
     def launch_motor(self, value):
-        if self.connection_opened:
+        if self.connection_opened and self.in_action:
             self.write("d{}".format(value))
 
     def close(self):
@@ -64,6 +73,24 @@ class ComportMainboard(threading.Thread):
 	try:
             self.connection.flush()
             txt = self.connection.readline()
+
+            #Handling the message if its from referee
+            if txt is not None:
+                command = txt.strip()
+                if command.startswith('<ref:a'):
+                    command = command.replace('-','')
+                    command=command[6:-1]
+                    Field_ID= command[0]
+                    Robot_ID = command[1]
+                    actual_command = command[2:]
+                    if (Field_ID == self.Myfield and (Robot_ID == self.My_ID or Robot_ID=='X')):
+                        print('F:{},R:{},comd:{}'.format(Field_ID,Robot_ID,actual_command))
+                        if actual_command == 'START':
+                            self.in_action=True
+                        elif actual_command=='STOP':
+                            self.in_action=False
+                        elif actual_command=='PING':
+                            self.write_ref('rf:aX{}ACK-----'.format(My_ID))
             if verbos:
                 print(txt)
             return txt

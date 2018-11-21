@@ -54,7 +54,7 @@ def Rotate_towards(obj_name,com,coordinates,config):
 
 
 def Where_is(obj_name,color_frame,img_handler,config):
-
+    global My_ID
     coordinates = None
     color_image = np.asanyarray(color_frame.get_data())
 
@@ -62,6 +62,10 @@ def Where_is(obj_name,color_frame,img_handler,config):
         coordinates = img_handler.LocateBallCenter(color_image)
     else:
         coordinates = img_handler.LocateBasket(color_image,"blue",config)
+        #if My_ID =='A':
+        #    coordinates = img_handler.LocateBasket(color_image,"blue",config)
+        #else:
+        #    coordinates = img_handler.LocateBasket(color_image,"redl",config)
 
     return coordinates
 
@@ -192,16 +196,23 @@ def CalculateThrowerStrength(dist):
 
 def main():
     global Thrower_Strength
+
+    global Myfield 
+    Myfield ='A'
+    global My_ID
+    My_ID = 'B'
     com = ComportMainboard()
     com.open()
     config = Config()
     pipeline = Start_Pipeline(config)
     img_handler = Image_Handler()
-    steps_forward = 100
-
-
+    steps_forward = 30
+    com.in_action= True
+    #while (not com.in_action):
+    #    print(com.in_action)
+    #    com.Readmsgs()
     for i in range(steps_forward):
-        move(com,wheelspeeds(15,90,0))
+        move(com,wheelspeeds(30,90,0))
         time.sleep(config.wait_time)
     while True:
 
