@@ -1,4 +1,3 @@
-
 import pyrealsense2 as rs
 import numpy as np
 import cv2
@@ -9,7 +8,19 @@ from Hardware.mainboard import *
 from Hardware.Motor import *
 from config import Config
 from time import sleep
+import json
 
+DS5_product_ids = ["0AD1", "0AD2", "0AD3", "0AD4", "0AD5", "0AF6", "0AFE", "0AFF", "0B00", "0B01", "0B03", "0B07"]
+def find_device_that_supports_advanced_mode() :
+    ctx = rs.context()
+    ds5_dev = rs.device()
+    devices = ctx.query_devices();
+    for dev in devices:
+        if dev.supports(rs.camera_info.product_id) and str(dev.get_info(rs.camera_info.product_id)) in DS5_product_ids:
+            if dev.supports(rs.camera_info.name):
+                print("Found device that supports advanced mode:", dev.get_info(rs.camera_info.name))
+            return dev
+    raise Exception("No device that supports advanced mode was found")
 
 def Start_Pipeline(config):
 
@@ -20,10 +31,48 @@ def Start_Pipeline(config):
     rsconfig.enable_stream(rs.stream.color, config.frame_width, config.frame_heigth, rs.format.bgr8, 60)
     # Start streaming
     pipeline.start(rsconfig)
+    try:
+        dev = find_device_that_supports_advanced_mode()
+        advnc_mode = rs.rs400_advanced_mode(dev)
+        print("Advanced mode is", "enabled" if advnc_mode.is_enabled() else "disabled")
+
+        # Loop until we successfully enable advanced mode
+        while not advnc_mode.is_enabled():
+            print("Trying to enable advanced mode...")
+            advnc_mode.toggle_advanced_mode(True)
+            # At this point the device will disconnect and re-connect.
+            print("Sleeping for 5 seconds...")
+            time.sleep(5)
+            # The 'dev' object will become invalid and we need to initialize it again
+            dev = find_device_that_supports_advanced_mode()
+            advnc_mode = rs.rs400_advanced_mode(dev)
+            print("Advanced mode is", "enabled" if advnc_mode.is_enabled() else "disabled")
+
+        # Serialize all controls to a Json string
+        serialized_string = advnc_mode.serialize_json()
+        as_json_object = json.loads(serialized_string)
+
+        # We can also load controls from a json string
+        # For Python 2, the values in 'as_json_object' dict need to be converted from unicode object to utf-8
+        if type(next(iter(as_json_object))) != str:
+            as_json_object = {k.encode('utf-8'): v.encode("utf-8") for k, v in as_json_object.items()}
+            
+        #Set auto white balance to False
+        as_json_object['controls-color-white-balance-auto'] = 'False'
+        as_json_object['controls-color-autoexposure-auto']='False'
+        as_json_object['controls-autoexposure-auto']= 'False' 
+        
+        # The C++ JSON parser requires double-quotes for the json object so we need
+        # to replace the single quote of the pythonic json to double-quotes
+        json_string = str(as_json_object).replace("'", '\"')
+        advnc_mode.load_json(json_string)
+
+    except Exception as e:
+        print(e)
     ## Skip first 2 seconds frames
-    print('Skipping frames')
-    for i in range(120):
-        frames = pipeline.wait_for_frames()
+    #print('Skipping frames')
+    #for i in range(120):
+    #    frames = pipeline.wait_for_frames()
     return pipeline
 
 def Get_frames(pipeline):
@@ -61,11 +110,11 @@ def Where_is(obj_name,color_frame,img_handler,config):
     if obj_name == 'ball':
         coordinates = img_handler.LocateBallCenter(color_image)
     else:
-        coordinates = img_handler.LocateBasket(color_image,"blue",config)
-        #if My_ID =='A':
-        #    coordinates = img_handler.LocateBasket(color_image,"blue",config)
-        #else:
-        #    coordinates = img_handler.LocateBasket(color_image,"redl",config)
+        #coordinates = img_handler.LocateBasket(color_image,"blue",config)
+        if My_ID =='A':
+            coordinates = img_handler.LocateBasket(color_image,"blue",config)
+        else:
+            coordinates = img_handler.LocateBasket(color_image,"redl",config)
 
     return coordinates
 
@@ -164,11 +213,11 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
                 if xk > config.max_bask_x:
                     print("right")
                     print(ang_vel)
-                    move(com,wheelspeeds(5,180,ang_vel))
+                    move(com,wheelspeeds(7,180,ang_vel))
                 elif xk < config.min_bask_x:
                     print("left")
                     print(ang_vel)
-                    move(com,wheelspeeds(5,0,ang_vel))
+                    move(com,wheelspeeds(7,0,ang_vel))
                 else:
                     if ball_align:
                         move(com,stop())
@@ -176,8 +225,10 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
                         print("Basket x",xk)
                         print("Ball x",xb)
                         bas_dist = depth_frame.get_distance(xk,yk)
-                        print('dist:{}'.format(bas_dist))
-                        CalculateThrowerStrength(bas_dist)
+                        ball_dist = depth_frame.get_distance(xb,yb)
+			t_dist = bas_dist - ball_dist
+			print('dist:{}'.format(t_dist))
+                        CalculateThrowerStrength(t_dist)
                     else:
 
                         move(com,wheelspeeds(0,0,ang_vel))
@@ -189,10 +240,10 @@ Thrower_Strength = -1
 def CalculateThrowerStrength(dist):
     global Thrower_Strength
     #Thrower_Strength=int(14.558*dist + 158)
-    val = 14.558*dist + 158
-    Thrower_Strength= 7.55199*pow(dist,2)-20.3776*dist + 195.411
-    print('lin:{},poly:{}'.format(val,Thrower_Strength))
-    Thrower_Strength = int(Thrower_Strength)+1
+    #val = 14.558*dist + 158
+    Thrower_Strength= 10*pow(dist,2)-19*dist + 194
+    print('poly:{}'.format(Thrower_Strength))
+    Thrower_Strength = int(Thrower_Strength)
 
 def main():
     global Thrower_Strength
@@ -200,13 +251,13 @@ def main():
     global Myfield 
     Myfield ='A'
     global My_ID
-    My_ID = 'B'
+    My_ID = 'A'
     com = ComportMainboard()
     com.open()
     config = Config()
     pipeline = Start_Pipeline(config)
     img_handler = Image_Handler()
-    steps_forward = 30
+    steps_forward = 5
     com.in_action= True
     #while (not com.in_action):
     #    print(com.in_action)
