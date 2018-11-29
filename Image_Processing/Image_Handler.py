@@ -5,20 +5,23 @@ import pyrealsense2 as rs
 
 class Image_Handler():
 
-    def LocateBallCenter(self,frame):
+    def LocateBallCenter(self,frame,greenLower=None,greenUpper=None):
         # define the lower and upper boundaries of the "green"
         # ball in the HSV color space, then initialize the
-        # list of tracked points
-        greenLower = (25,110,56)
-        greenUpper = (90,255,146)
-
+        #new ones generated 26 November
+        if greenLower is None:
+            greenLower = (8, 113,  17)
+        if greenUpper is None:
+            greenUpper = (80, 255,  75)
         # resize the frame, blur it, and convert it to the HSV
         # color space
         blurred = cv2.GaussianBlur(frame, (11, 11), 0)
         hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
         mask = cv2.inRange(hsv, greenLower, greenUpper)
-        mask = cv2.erode(mask, None, iterations=1)
-        mask = cv2.dilate(mask, None, iterations=1)
+        erode_kernel = np.ones((4, 4), np.uint8)
+        mask = cv2.erode(mask, erode_kernel, iterations=1)
+        dilate_kernel = np.ones((10, 10), np.uint8)
+        mask = cv2.dilate(mask, dilate_kernel, iterations=1)
 
         # find contours in the mask and initialize the current
         # (x, y) center of the ball
@@ -61,7 +64,7 @@ class Image_Handler():
         mask = cv2.inRange(hsv, low, up)
         mask = cv2.erode(mask, None, iterations=1)
         mask = cv2.dilate(mask, None, iterations=1)
-
+        imask = mask>0
         cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
                                 cv2.CHAIN_APPROX_SIMPLE)[-2]
         center = None
@@ -72,4 +75,4 @@ class Image_Handler():
             # only proceed if the basket meets a minimum size
             if w*h > 20:
                 center = (int(x), int(y))
-        return center
+        return center,imask

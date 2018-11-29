@@ -60,7 +60,7 @@ def Start_Pipeline(config):
         #Set auto white balance to False
         as_json_object['controls-color-white-balance-auto'] = 'False'
         as_json_object['controls-color-autoexposure-auto']='False'
-        as_json_object['controls-autoexposure-auto']= 'False' 
+        as_json_object['controls-autoexposure-auto']= 'True' 
         
         # The C++ JSON parser requires double-quotes for the json object so we need
         # to replace the single quote of the pythonic json to double-quotes
@@ -74,6 +74,49 @@ def Start_Pipeline(config):
     #for i in range(120):
     #    frames = pipeline.wait_for_frames()
     return pipeline
+
+def PrepareCamera():
+        pipeline = rs.pipeline()
+        config = rs.config()
+        config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 60)
+        config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 60)
+
+        pipeline.start(config)
+        # Create an align object
+        # rs.align allows us to perform alignment of depth frames to others frames
+        # The "align_to" is the stream type to which we plan to align depth frames.
+        align_to = rs.stream.color
+        align = rs.align(align_to)
+
+        ctx = rs.context()
+        devices = ctx.query_devices()
+        for dev in devices:
+            if dev.supports(rs.camera_info.product_id) and dev.supports(rs.camera_info.name):
+                print("Found camera device: {}".format(dev.get_info(rs.camera_info.name)))
+                sensors = dev.query_sensors()
+                for sensor in sensors:
+                    if sensor.get_info(rs.camera_info.name) == "RGB Camera" and sensor.supports(
+                            rs.option.exposure) and sensor.supports(rs.option.gain):
+                        print("Setting RGB camera sensor settings")
+                        sensor.set_option(rs.option.enable_auto_exposure, 1)
+                        sensor.set_option(rs.option.white_balance, 3000)
+                        sensor.set_option(rs.option.enable_auto_white_balance, 0)
+                        sensor.set_option(rs.option.gain, 0)
+                        print("exposure: {}".format(sensor.get_option(rs.option.exposure)))
+                        print("white balance: {}".format(sensor.get_option(rs.option.white_balance)))
+                        print("gain: {}".format(sensor.get_option(rs.option.gain)))
+                        print(
+                            "auto exposure enabled: {}".format(sensor.get_option(rs.option.enable_auto_exposure)))
+                        time.sleep(2)
+                        sensor.set_option(rs.option.enable_auto_exposure, 0)
+                        print(
+                            "auto exposure enabled: {}".format(sensor.get_option(rs.option.enable_auto_exposure)))
+                        print("exposure: {}".format(sensor.get_option(rs.option.exposure)))  # 166
+                        print("white balance: {}".format(sensor.get_option(rs.option.white_balance)))
+                        print("gain: {}".format(sensor.get_option(rs.option.gain)))  # 64
+                        break
+		break
+	return pipeline
 
 def Get_frames(pipeline):
     # Wait for a coherent pair of frames: depth and color
@@ -106,28 +149,27 @@ def Where_is(obj_name,color_frame,img_handler,config):
     global My_ID
     coordinates = None
     color_image = np.asanyarray(color_frame.get_data())
-
+    imask = None
     if obj_name == 'ball':
         coordinates = img_handler.LocateBallCenter(color_image)
     else:
         #coordinates = img_handler.LocateBasket(color_image,"blue",config)
         if My_ID =='A':
-            coordinates = img_handler.LocateBasket(color_image,"blue",config)
+            coordinates,imask = img_handler.LocateBasket(color_image,"blue",config)
         else:
-            coordinates = img_handler.LocateBasket(color_image,"redl",config)
+            coordinates,imask = img_handler.LocateBasket(color_image,"redl",config)
 
-    return coordinates
+    return coordinates,imask
 
 
 def CenterOn(obj_name,com,pipeline,img_handler,config):
-
     centered = False
 
     rotate = 0
     while not centered:
 
         color_frame,depth_frame = Get_frames(pipeline)
-        coordinates = Where_is(obj_name,color_frame,img_handler,config)
+        coordinates,imask = Where_is(obj_name,color_frame,img_handler,config)
 
         if coordinates == None:
             rotate+=1
@@ -146,7 +188,7 @@ def GoTowards(obj_name,com,pipeline,img_handler,config,until,vel):
     while not near:
 
         color_frame,depth_frame = Get_frames(pipeline)
-        coordinates = Where_is(obj_name,color_frame,img_handler,config)
+        coordinates,imask = Where_is(obj_name,color_frame,img_handler,config)
 
         if coordinates == None:
             CenterOn(obj_name,com,pipeline,img_handler,config)
@@ -172,25 +214,19 @@ def ang_vel_towards(obj_name,com,coordinates,config):
        print('Centered on:',obj_name)
     return ang_vel
 
-
 def Aling_Basket_Ball(com,pipeline,img_handler,config):
     #Todo add constants to config
     align = False
     ball_align = False
 
     while not align:
-
         color_frame,depth_frame = Get_frames(pipeline)
-        coordinates_basket = Where_is("basket",color_frame,img_handler,config)
-        coordinates_ball = Where_is("ball",color_frame,img_handler,config)
-
+        coordinates_ball,imask = Where_is("ball",color_frame,img_handler,config)
+        coordinates_basket,imask = Where_is("basket",color_frame,img_handler,config)
         if coordinates_ball == None:
             CenterOn('ball',com,pipeline,img_handler,config)
-
         else:
-
             xb,yb = coordinates_ball
-
             if xb > config.max_cent_x:
                ang_vel = -config.around_ang_vel
                ball_align = False
@@ -200,24 +236,19 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
             else:
                ball_align = True
                ang_vel = 0
-
             if coordinates_basket == None:
-
-                move(com,wheelspeeds(10,0,ang_vel))
+                move(com,wheelspeeds(30,0,ang_vel))
                 time.sleep(config.wait_time)
-
             else:
-
                 xk,yk = coordinates_basket
-
                 if xk > config.max_bask_x:
                     print("right")
                     print(ang_vel)
-                    move(com,wheelspeeds(7,180,ang_vel))
+                    move(com,wheelspeeds(15,180,ang_vel))
                 elif xk < config.min_bask_x:
                     print("left")
                     print(ang_vel)
-                    move(com,wheelspeeds(7,0,ang_vel))
+                    move(com,wheelspeeds(15,0,ang_vel))
                 else:
                     if ball_align:
                         move(com,stop())
@@ -226,8 +257,10 @@ def Aling_Basket_Ball(com,pipeline,img_handler,config):
                         print("Ball x",xb)
                         bas_dist = depth_frame.get_distance(xk,yk)
                         ball_dist = depth_frame.get_distance(xb,yb)
-			t_dist = bas_dist - ball_dist
-			print('dist:{}'.format(t_dist))
+                        depth_image = np.asanyarray(depth_frame.get_data())
+                        #t_dist = bas_dist - ball_dist
+                        t_dist = np.median(depth_image[imask])
+                        print('dist:{}'.format(t_dist))
                         CalculateThrowerStrength(t_dist)
                     else:
 
@@ -241,9 +274,12 @@ def CalculateThrowerStrength(dist):
     global Thrower_Strength
     #Thrower_Strength=int(14.558*dist + 158)
     #val = 14.558*dist + 158
-    Thrower_Strength= 10*pow(dist,2)-19*dist + 194
+    #Thrower_Strength= 9.4*pow(dist,2)-19*dist + 194
+    #Thrower_Strength =  9.75365*dist + 170.093
+    Thrower_Strength =  9.86513*dist + 172.83
     print('poly:{}'.format(Thrower_Strength))
     Thrower_Strength = int(Thrower_Strength)
+    Thrower_Strength = 200
 
 def main():
     global Thrower_Strength
@@ -255,33 +291,33 @@ def main():
     com = ComportMainboard()
     com.open()
     config = Config()
-    pipeline = Start_Pipeline(config)
+    #pipeline = Start_Pipeline(config)
+    pipeline = PrepareCamera()
     img_handler = Image_Handler()
     steps_forward = 5
     com.in_action= True
     #while (not com.in_action):
     #    print(com.in_action)
     #    com.Readmsgs()
-    for i in range(steps_forward):
-        move(com,wheelspeeds(30,90,0))
-        time.sleep(config.wait_time)
+    #for i in range(steps_forward):
+    #    move(com,wheelspeeds(30,90,0))
+    #    time.sleep(config.wait_time)
     while True:
-
-
         CenterOn('ball',com,pipeline,img_handler,config)
 
-        GoTowards('ball',com,pipeline,img_handler,config,until=0.4,vel=15)
+        GoTowards('ball',com,pipeline,img_handler,config,until=0.4,vel=80)
 
         Aling_Basket_Ball(com,pipeline,img_handler,config)
 
-        GoTowards('ball',com,pipeline,img_handler,config,until=0.36,vel=5)
+        GoTowards('ball',com,pipeline,img_handler,config,until=0.36,vel=20)
         print(Thrower_Strength)
-        for i in range(5):
+        for i in range(4):
             move(com,wheelspeeds(15,90,0))
             thrower(com,Thrower_Strength)
             time.sleep(config.wait_time)
         move(com,stop())
-        thrower(com,145)
+        thrower(com,140)
+        exit()
     #Launch the ball
     #time.sleep(10)
     #print("Launch the ball")
